@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model SiteSetting {
+  id           String @id @default("main")
+  siteName     String @default("Levent Koleji")
+  tagline      String @default("Eğitimde mükemmellik")
+  phone        String @default("(0464) 217 15 55")
+  email        String @default("info@leventokullari.com")
+  address      String @default("Hayrat, 53020 Rize Merkez / Rize")
+  facebookUrl  String @default("")
+  instagramUrl String @default("")
+  youtubeUrl   String @default("")
+  heroTitle    String @default("Levent Koleji")
+  heroSubtitle String @default("Öğrencilerimizi en yüksek başarıya ulaştırmak için uzman kadromuzla yanınızdayız.")
+  aboutPreview String @default("Bölgenin köklü eğitim kurumlarından biri olarak akademik başarıyı ve karakter gelişimini birlikte büyütüyoruz.")
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  coverImage  String?
+  published   Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String          @id @default(cuid())
+  title       String
+  slug        String          @unique
+  excerpt     String
+  content     String
+  location    String          @default("")
+  eventDate   DateTime
+  coverImage  String?
+  published   Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  categories  EventCategory[]
+}
+
+model EventCategory {
+  id     String  @id @default(cuid())
+  name   String
+  slug   String  @unique
+  order  Int     @default(0)
+  events Event[]
+}
+
+model Program {
+  id          String  @id @default(cuid())
+  title       String
+  slug        String  @unique
+  summary     String
+  description String
+  order       Int     @default(0)
+  published   Boolean @default(true)
+}
+
+model Staff {
+  id        String  @id @default(cuid())
+  name      String
+  title     String
+  bio       String  @default("")
+  photoUrl  String?
+  order     Int     @default(0)
+  published Boolean @default(true)
+}
+
+model GalleryAlbum {
+  id          String         @id @default(cuid())
+  title       String
+  slug        String         @unique
+  description String         @default("")
+  published   Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  images      GalleryImage[]
+}
+
+model GalleryImage {
+  id        String       @id @default(cuid())
+  albumId   String
+  album     GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String       @default("")
+  order     Int          @default(0)
+  createdAt DateTime     @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String   @default("")
+  subject   String   @default("")
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
