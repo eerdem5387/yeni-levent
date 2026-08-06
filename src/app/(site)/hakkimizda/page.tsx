@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { publishedStaffWithPhotoWhere } from "@/lib/staff";
 
 export const metadata = { title: "Hakkımızda" };
 
@@ -7,7 +8,7 @@ export default async function AboutPage() {
   const [page, staff] = await Promise.all([
     prisma.page.findUnique({ where: { slug: "hakkimizda" } }),
     prisma.staff.findMany({
-      where: { published: true },
+      where: publishedStaffWithPhotoWhere,
       orderBy: { order: "asc" },
     }),
   ]);
@@ -38,22 +39,21 @@ export default async function AboutPage() {
           </p>
           <div className="gold-rule mt-5" />
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 sm:gap-8 md:grid-cols-3">
+            {staff.length === 0 && (
+              <p className="text-muted sm:col-span-2 md:col-span-3">
+                Kadro bilgileri yakında eklenecek.
+              </p>
+            )}
             {staff.map((member) => (
               <article key={member.id} className="border-t border-gold pt-6">
                 <div className="relative mb-4 aspect-square overflow-hidden bg-navy/10">
-                  {member.photoUrl ? (
-                    <Image
-                      src={member.photoUrl}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center bg-navy text-4xl text-gold-light">
-                      {member.name.charAt(0)}
-                    </div>
-                  )}
+                  <Image
+                    src={member.photoUrl!}
+                    alt={member.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                 </div>
                 <h3 className="font-[family-name:var(--font-display)] text-xl text-navy">
                   {member.name}

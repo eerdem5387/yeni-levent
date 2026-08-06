@@ -116,32 +116,6 @@ async function main() {
     });
   }
 
-  const staff = [
-    {
-      name: "Örnek Rehber Öğretmen",
-      title: "Rehberlik",
-      bio: "Öğrenci gelişimini akademik ve duygusal boyutlarıyla destekler.",
-      order: 1,
-    },
-    {
-      name: "Örnek Matematik Öğretmeni",
-      title: "Matematik",
-      bio: "Kavramsal öğrenme ve problem çözme becerilerini güçlendirir.",
-      order: 2,
-    },
-    {
-      name: "Örnek Fizik Öğretmeni",
-      title: "Fizik",
-      bio: "Deney ve uygulama temelli fizik eğitimi sunar.",
-      order: 3,
-    },
-  ];
-
-  const existingStaff = await prisma.staff.count();
-  if (existingStaff === 0) {
-    await prisma.staff.createMany({ data: staff });
-  }
-
   console.log("Seed tamamlandı.");
   console.log(`Admin: ${email} / ${password}`);
 }

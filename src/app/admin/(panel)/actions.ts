@@ -122,9 +122,13 @@ export async function saveStaff(formData: FormData) {
   const name = String(formData.get("name") || "");
   const title = String(formData.get("title") || "");
   const bio = String(formData.get("bio") || "");
-  const photoUrl = String(formData.get("photoUrl") || "") || null;
+  const photoUrl = String(formData.get("photoUrl") || "").trim() || null;
   const order = Number(formData.get("order") || 0);
   const published = formData.get("published") === "on";
+
+  if (!id && !photoUrl) {
+    throw new Error("Yeni kadro üyesi için fotoğraf zorunludur.");
+  }
 
   if (id) {
     await prisma.staff.update({

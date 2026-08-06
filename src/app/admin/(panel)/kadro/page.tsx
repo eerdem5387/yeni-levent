@@ -14,7 +14,7 @@ export default async function AdminStaffPage() {
         <input name="name" required placeholder="Ad Soyad" className="w-full border border-line px-3 py-2" />
         <input name="title" required placeholder="Unvan / Branş" className="w-full border border-line px-3 py-2" />
         <textarea name="bio" rows={3} placeholder="Kısa biyografi" className="w-full border border-line px-3 py-2" />
-        <StaffPhotoField />
+        <StaffPhotoField required />
         <div>
           <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
           <input name="order" type="number" defaultValue={0} className="w-32 border border-line px-3 py-2" />

@@ -1,16 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type StaffPhotoFieldProps = {
   defaultUrl?: string | null;
+  required?: boolean;
 };
 
-export function StaffPhotoField({ defaultUrl }: StaffPhotoFieldProps) {
+export function StaffPhotoField({ defaultUrl, required = false }: StaffPhotoFieldProps) {
   const [photoUrl, setPhotoUrl] = useState(defaultUrl ?? "");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!required) return;
+
+    const form = rootRef.current?.closest("form");
+    if (!form) return;
+
+    function handleSubmit(event: SubmitEvent) {
+      if (uploading) {
+        event.preventDefault();
+        setError("Fotoğraf yükleniyor, lütfen bekleyin.");
+        return;
+      }
+      if (!photoUrl.trim()) {
+        event.preventDefault();
+        setError("Fotoğraf zorunludur.");
+      }
+    }
+
+    form.addEventListener("submit", handleSubmit);
+    return () => form.removeEventListener("submit", handleSubmit);
+  }, [photoUrl, uploading, required]);
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -38,6 +62,7 @@ export function StaffPhotoField({ defaultUrl }: StaffPhotoFieldProps) {
       }
 
       setPhotoUrl(data.url);
+      setError("");
     } catch (uploadError) {
       setPhotoUrl(defaultUrl ?? "");
       setError(
@@ -50,8 +75,10 @@ export function StaffPhotoField({ defaultUrl }: StaffPhotoFieldProps) {
   }
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium text-navy">Fotoğraf</label>
+    <div ref={rootRef} className="space-y-2">
+      <label className="block text-sm font-medium text-navy">
+        Fotoğraf{required && <span className="text-crimson"> *</span>}
+      </label>
       {photoUrl && (
         <div className="relative h-24 w-24 overflow-hidden border border-line bg-navy/5">
           <Image src={photoUrl} alt="Kadro fotoğrafı" fill className="object-cover" />
@@ -68,7 +95,9 @@ export function StaffPhotoField({ defaultUrl }: StaffPhotoFieldProps) {
       <p className="text-xs text-muted">
         {uploading
           ? "Fotoğraf yükleniyor..."
-          : "Dosya seçildiğinde otomatik yüklenir · JPG, PNG, WebP veya GIF · en fazla 5 MB"}
+          : required
+            ? "Fotoğraf zorunludur · dosya seçildiğinde otomatik yüklenir · JPG, PNG, WebP veya GIF · en fazla 5 MB"
+            : "Dosya seçildiğinde otomatik yüklenir · JPG, PNG, WebP veya GIF · en fazla 5 MB"}
       </p>
       {error && <p className="text-xs text-crimson">{error}</p>}
     </div>
