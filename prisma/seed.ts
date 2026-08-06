@@ -32,14 +32,16 @@ async function main() {
     },
   });
 
+  const hakkimizdaContent =
+    "Levent College Concept, 2018'den bu güne öğrencilerin potansiyellerini keşfetmelerine, bilgiye açılan kapılar aralamalarına ve başarıya ulaşmalarına olanak tanıyan bir eğitim kurumudur. Modern eğitim anlayışıyla donatılmış okulumuz, öğrencilere yenilikçi yöntemlerle eğitim verirken, onların bireysel gelişimlerini destekleyerek geleceğe hazırlar. Nitelikli öğretmen kadrosuyla öğrencilere ilham veren bir ortam sunar. Levent College Concept, her bir öğrencinin yeteneklerini açığa çıkarmasını, yaratıcılıklarını geliştirmesini ve en yüksek potansiyellerine ulaşmasını sağlar.\n\nLevent College Concept, öğrencilere akademik başarılarının yanı sıra bir dizi destekleyici hizmet sunar. Öğrencilerin kişisel ve akademik gelişimlerini desteklemek için çeşitli etkinlikler, kulüpler ve atölye çalışmaları düzenlenir. Öğrencilere rehberlik hizmetleri sunularak kariyer planlamaları ve üniversiteye hazırlık süreçleri desteklenir. Ayrıca, modern eğitim teknolojileriyle donatılmış sınıflar ve laboratuvarlar, öğrencilerin interaktif bir öğrenme deneyimi yaşamasını sağlar. Levent College Concept, öğrencilerin sadece akademik olarak değil, aynı zamanda sosyal ve duygusal açıdan da gelişmelerini destekleyerek bireylerin geleceğe güvenle bakmalarını sağlar.";
+
   await prisma.page.upsert({
     where: { slug: "hakkimizda" },
-    update: {},
+    update: { content: hakkimizdaContent },
     create: {
       slug: "hakkimizda",
       title: "Hakkımızda",
-      content:
-        "Levent Koleji, 2018 yılından bu yana öğrencilerin akademik başarısını ve kişisel gelişimini merkeze alan bir eğitim anlayışıyla hizmet vermektedir.\n\nUzman kadromuz, modern öğretim yöntemleri ve bireysel takip sistemiyle her öğrencinin potansiyelini en üst seviyeye çıkarmayı hedefler.",
+      content: hakkimizdaContent,
     },
   });
 
