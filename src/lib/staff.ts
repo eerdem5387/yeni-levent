@@ -10,7 +10,7 @@ export const publishedStaffWithPhotoWhere = {
     { photoUrl: { startsWith: "http" } },
     { photoUrl: { startsWith: "/uploads/" } },
   ],
-} as const;
+};
 
 export const staffWithoutPhotoWhere = {
   OR: [
@@ -23,4 +23,4 @@ export const staffWithoutPhotoWhere = {
       ],
     },
   ],
-} as const;
+};
