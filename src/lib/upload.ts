@@ -47,22 +47,27 @@ export async function saveStaffPhotoToBlob(file: File) {
   if (!file.size) return null;
 
   const ext = validateUploadedImage(file);
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  const hasBlobStore =
+    Boolean(process.env.BLOB_READ_WRITE_TOKEN) ||
+    Boolean(process.env.BLOB_STORE_ID);
 
-  if (!token) {
-    if (process.env.NODE_ENV === "development") {
-      return saveUploadedImage(file, "staff");
-    }
+  if (!hasBlobStore && process.env.NODE_ENV === "development") {
+    return saveUploadedImage(file, "staff");
+  }
+
+  if (!hasBlobStore) {
     throw new Error(
-      "BLOB_READ_WRITE_TOKEN tanımlı değil. Vercel Blob store bağlayın veya .env dosyasına token ekleyin.",
+      "Blob store bağlı değil. Vercel → Storage → Blob → Connect to Project yapın.",
     );
   }
 
   const pathname = `staff/${randomUUID()}.${ext}`;
   const blob = await put(pathname, file, {
     access: "public",
-    token,
     addRandomSuffix: false,
+    ...(process.env.BLOB_READ_WRITE_TOKEN
+      ? { token: process.env.BLOB_READ_WRITE_TOKEN }
+      : {}),
   });
 
   return blob.url;
