@@ -34,6 +34,7 @@ yarn-error.log*
 .env
 .env*.local
 !.env.example
+vercel.env.import
 
 # sqlite (local legacy)
 prisma/*.db
@@ -53,3 +54,6 @@ next-env.d.ts
 
 # accidental nested clone
 /levent-koleji/
+
+.vercel
+.env*
