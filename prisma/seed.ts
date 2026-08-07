@@ -16,14 +16,18 @@ async function main() {
 
   await prisma.siteSetting.upsert({
     where: { id: "main" },
-    update: {},
+    update: {
+      phone: "(0464) 217 15 55",
+      email: "info@leventokullari.com",
+      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
+    },
     create: {
       id: "main",
       siteName: "Levent Koleji",
       tagline: "Eğitimde mükemmellik",
       phone: "(0464) 217 15 55",
       email: "info@leventokullari.com",
-      address: "Hayrat, 53020 Rize Merkez / Rize",
+      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
       heroTitle: "Levent Koleji",
       heroSubtitle:
         "Öğrencilerimizi en yüksek başarıya ulaştırmak için uzman kadromuzla yanınızdayız.",

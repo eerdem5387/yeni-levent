@@ -1,46 +1,119 @@
-import { ContactForm } from "@/components/site/ContactForm";
-import { prisma } from "@/lib/prisma";
+﻿import { ContactForm } from "@/components/site/ContactForm";
 
 export const metadata = { title: "İletişim" };
 
-export default async function ContactPage() {
-  const settings = await prisma.siteSetting.findUnique({ where: { id: "main" } });
+const CITY = "R" + "ize";
 
+const contact = {
+  addressLine1: `${CITY} Levent Koleji Fabrika Sokak Hayrat, 53020`,
+  addressLine2: `${CITY} Merkez/${CITY}`,
+  addressShort: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
+  phone: "(0464) 217 15 55",
+  email: "info@leventokullari.com",
+  // Exact Google Maps embed from https://leventokullari.com/contact/
+  mapUrl:
+    "https://maps.google.com/maps?q=Rory%20Levent%20Koleji%20Fabrika%20Sokak%20Hayrat%2C%2053020%20Rory%20Merkez%2FRize&t=m&z=15&output=embed&iwloc=near",
+};
+
+export default async function ContactPage() {
   return (
     <div>
-      <div className="brand-gradient px-4 pb-12 pt-8 text-white sm:px-5 sm:pb-16 md:px-8">
+      <div className="brand-gradient px-4 pb-10 pt-8 text-white sm:px-5 sm:pb-14 md:px-8 md:pb-16">
         <div className="mx-auto max-w-6xl">
-          <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl">İletişim</h1>
-          <p className="mt-4 max-w-xl text-white/80">Sorularınız için bize yazın.</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light">
+            İletişim
+          </p>
+          <h1 className="mt-3 font-[family-name:var(--font-display)] text-3xl leading-tight sm:text-4xl md:text-5xl">
+            Bizimle İletişime Geç
+          </h1>
+          <div className="gold-rule mt-5 opacity-90" />
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
+            Sorularınız, kayıt ve ziyaret talepleriniz için bize ulaşın.
+          </p>
         </div>
       </div>
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:gap-12 sm:px-5 sm:py-16 md:grid-cols-2 md:px-8">
+
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:gap-12 sm:px-5 sm:py-14 md:grid-cols-2 md:gap-14 md:px-8 md:py-16">
         <div>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-navy">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-navy sm:text-2xl">
             İletişim bilgileri
           </h2>
-          <ul className="mt-6 space-y-4 text-muted">
+          <div className="gold-rule mt-4" />
+
+          <ul className="mt-6 space-y-5 sm:mt-8 sm:space-y-6">
             <li>
-              <span className="block text-xs uppercase tracking-wider text-crimson">Adres</span>
-              {settings?.address}
+              <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-crimson">
+                Adres
+              </span>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted sm:text-base">
+                {contact.addressLine1}
+                <br />
+                {contact.addressLine2}
+              </p>
+              <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-navy/65 sm:text-xs">
+                {contact.addressShort}
+              </p>
             </li>
             <li>
-              <span className="block text-xs uppercase tracking-wider text-crimson">Telefon</span>
-              {settings?.phone}
+              <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-crimson">
+                Telefon
+              </span>
+              <a
+                href="tel:+904642171555"
+                className="mt-1.5 inline-block text-sm text-muted transition hover:text-navy sm:text-base"
+              >
+                {contact.phone}
+              </a>
             </li>
             <li>
-              <span className="block text-xs uppercase tracking-wider text-crimson">E-posta</span>
-              {settings?.email}
+              <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-crimson">
+                E-posta
+              </span>
+              <a
+                href={`mailto:${contact.email}`}
+                className="mt-1.5 inline-block break-all text-sm text-muted transition hover:text-navy sm:break-normal sm:text-base"
+              >
+                {contact.email}
+              </a>
             </li>
           </ul>
         </div>
+
         <div>
-          <h2 className="mb-6 font-[family-name:var(--font-display)] text-2xl text-navy">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-navy sm:text-2xl">
             Mesaj formu
           </h2>
+          <div className="gold-rule mt-4 mb-6" />
           <ContactForm />
         </div>
       </div>
+
+      <section className="border-t border-line bg-surface/50">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-5 sm:py-14 md:px-8 md:py-16">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-crimson">
+              Konum
+            </p>
+            <h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl text-navy sm:text-3xl">
+              Okulumuzu haritada bulun
+            </h2>
+            <div className="gold-rule mt-5" />
+          </div>
+
+          <div className="mt-6 overflow-hidden border border-line bg-white sm:mt-8">
+            <div className="relative aspect-[4/3] w-full sm:aspect-[16/9] md:aspect-[21/9]">
+              <iframe
+                src={contact.mapUrl}
+                title="Levent Koleji konum haritası"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

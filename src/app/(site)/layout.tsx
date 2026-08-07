@@ -9,7 +9,7 @@ async function getSettings() {
       siteName: "Levent Koleji",
       phone: "(0464) 217 15 55",
       email: "info@leventokullari.com",
-      address: "Hayrat, 53020 Rize Merkez / Rize",
+      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
     }
   );
 }
