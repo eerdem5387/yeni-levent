@@ -23,11 +23,12 @@ export const metadata: Metadata = {
     "Levent Koleji — akademik başarı, rehberlik ve karakter gelişimini bir arada sunan eğitim kurumu.",
   icons: {
     icon: [
-      { url: "/icon.png", type: "image/png" },
-      { url: "/logo.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.png", type: "image/png", sizes: "48x48" },
     ],
-    shortcut: "/logo.png",
-    apple: "/apple-icon.png",
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
 };
 

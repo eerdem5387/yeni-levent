@@ -1,19 +1,7 @@
 ﻿import { ContactForm } from "@/components/site/ContactForm";
+import { siteContact } from "@/lib/contact";
 
 export const metadata = { title: "İletişim" };
-
-const CITY = "R" + "ize";
-
-const contact = {
-  addressLine1: `${CITY} Levent Koleji Fabrika Sokak Hayrat, 53020`,
-  addressLine2: `${CITY} Merkez/${CITY}`,
-  addressShort: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
-  phone: "(0464) 217 15 55",
-  email: "info@leventokullari.com",
-  // Exact Google Maps embed from https://leventokullari.com/contact/
-  mapUrl:
-    "https://maps.google.com/maps?q=Rory%20Levent%20Koleji%20Fabrika%20Sokak%20Hayrat%2C%2053020%20Rory%20Merkez%2FRize&t=m&z=15&output=embed&iwloc=near",
-};
 
 export default async function ContactPage() {
   return (
@@ -46,12 +34,9 @@ export default async function ContactPage() {
                 Adres
               </span>
               <p className="mt-1.5 text-sm leading-relaxed text-muted sm:text-base">
-                {contact.addressLine1}
+                {siteContact.addressLine1}
                 <br />
-                {contact.addressLine2}
-              </p>
-              <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-navy/65 sm:text-xs">
-                {contact.addressShort}
+                {siteContact.addressLine2}
               </p>
             </li>
             <li>
@@ -62,7 +47,7 @@ export default async function ContactPage() {
                 href="tel:+904642171555"
                 className="mt-1.5 inline-block text-sm text-muted transition hover:text-navy sm:text-base"
               >
-                {contact.phone}
+                {siteContact.phone}
               </a>
             </li>
             <li>
@@ -70,10 +55,10 @@ export default async function ContactPage() {
                 E-posta
               </span>
               <a
-                href={`mailto:${contact.email}`}
+                href={`mailto:${siteContact.email}`}
                 className="mt-1.5 inline-block break-all text-sm text-muted transition hover:text-navy sm:break-normal sm:text-base"
               >
-                {contact.email}
+                {siteContact.email}
               </a>
             </li>
           </ul>
@@ -103,7 +88,7 @@ export default async function ContactPage() {
           <div className="mt-6 overflow-hidden border border-line bg-white sm:mt-8">
             <div className="relative aspect-[4/3] w-full sm:aspect-[16/9] md:aspect-[21/9]">
               <iframe
-                src={contact.mapUrl}
+                src={siteContact.mapUrl}
                 title="Levent Koleji konum haritası"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

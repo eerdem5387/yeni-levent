@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/site/Footer";
 import { SiteHeader } from "@/components/site/Header";
+import { siteContact } from "@/lib/contact";
 import { prisma } from "@/lib/prisma";
 
 async function getSettings() {
@@ -7,9 +8,9 @@ async function getSettings() {
   return (
     settings ?? {
       siteName: "Levent Koleji",
-      phone: "(0464) 217 15 55",
-      email: "info@leventokullari.com",
-      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
+      phone: siteContact.phone,
+      email: siteContact.email,
+      address: siteContact.address,
     }
   );
 }

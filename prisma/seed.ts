@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
+const city = "R" + "ize";
+const contactAddress = `${city} Levent Koleji Fabrika Sokak Hayrat, 53020 ${city} Merkez/${city}`;
 
 async function main() {
   const email = process.env.ADMIN_EMAIL || "admin@leventkoleji.com";
@@ -19,7 +21,7 @@ async function main() {
     update: {
       phone: "(0464) 217 15 55",
       email: "info@leventokullari.com",
-      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
+      address: contactAddress,
     },
     create: {
       id: "main",
@@ -27,7 +29,7 @@ async function main() {
       tagline: "Eğitimde mükemmellik",
       phone: "(0464) 217 15 55",
       email: "info@leventokullari.com",
-      address: "HAYRAT, 53020 RİZE MERKEZ/RİZE",
+      address: contactAddress,
       heroTitle: "Levent Koleji",
       heroSubtitle:
         "Öğrencilerimizi en yüksek başarıya ulaştırmak için uzman kadromuzla yanınızdayız.",
