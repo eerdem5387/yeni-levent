@@ -185,8 +185,6 @@ export default async function HomePage() {
         </div>
         <HomeEvents events={events} hideHeader />
       </section>
-
-      <JobsCta />
     </>
   );
 }
