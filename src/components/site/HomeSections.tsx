@@ -38,19 +38,15 @@ export function RankingsGrid() {
       <div className="mx-auto max-w-[1320px] px-4 py-14 sm:px-5 sm:py-16 md:px-8">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {homeRankings.map((item) => (
-            <article key={item.name} className="instructor-card group">
+            <article key={item.name} className="instructor-card group overflow-hidden">
               <div className="relative aspect-[4/3] overflow-hidden bg-[#e2faff]">
-                <div
-                  className="pointer-events-none absolute left-0 top-0 z-[1] h-[55%] w-[55%] bg-[#e2faff]"
-                  style={{ borderRadius: "135px 0 0 0" }}
-                  aria-hidden
-                />
                 <Image
                   src={item.image}
                   alt={item.name}
                   fill
-                  className="object-cover object-top transition duration-500 group-hover:scale-[1.03]"
+                  className="object-cover object-[center_18%] transition duration-500 group-hover:scale-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                  priority
                 />
               </div>
               <div className="flex items-start justify-between gap-3 p-5 sm:p-6">
