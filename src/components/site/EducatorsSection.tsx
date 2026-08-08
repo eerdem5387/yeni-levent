@@ -155,29 +155,38 @@ export function EducatorsSection() {
             eğitimde mükemmelliği hedefler. Başarı, bizim DNA&apos;mızın bir parçasıdır.
           </p>
 
-          <div className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6">
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:mt-10 sm:gap-6">
             {features.map((feature) => (
-              <article key={feature.title} className="flex items-center gap-3 sm:gap-4">
+              <article key={feature.title} className="flex items-center gap-2.5 sm:gap-4">
                 <div
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full sm:h-16 sm:w-16 ${feature.color}`}
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-16 sm:w-16 ${feature.color}`}
                 >
                   {feature.icon}
                 </div>
-                <h3 className="whitespace-pre-line font-[family-name:var(--font-display)] text-base font-semibold text-[#082a5e] sm:text-lg">
+                <h3 className="whitespace-pre-line font-[family-name:var(--font-display)] text-sm font-semibold leading-snug text-[#082a5e] sm:text-lg">
                   {feature.title}
                 </h3>
               </article>
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/hakkimizda" className="btn-primary">
+          <div className="mt-8 flex flex-nowrap items-center gap-2 sm:gap-3">
+            <Link
+              href="/hakkimizda"
+              className="btn-primary flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+            >
               Hakkımızda
             </Link>
-            <Link href="/kadro" className="btn-outline">
+            <Link
+              href="/kadro"
+              className="btn-outline flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+            >
               Kadromuz
             </Link>
-            <Link href="/etkinlikler" className="btn-outline">
+            <Link
+              href="/etkinlikler"
+              className="btn-outline flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+            >
               Öğrencilerimiz
             </Link>
           </div>
