@@ -124,6 +124,28 @@ async function main() {
     });
   }
 
+  const staffCategories = [
+    { name: "Rehberlik Uzmanları", slug: "rehberlik-uzmanlari", order: 1 },
+    { name: "Matematik", slug: "matematik", order: 2 },
+    { name: "Fen Bilimleri", slug: "fen-bilimleri", order: 3 },
+    {
+      name: "Türkçe - Türk Dili ve Edebiyatı",
+      slug: "turkce-turk-dili-ve-edebiyati",
+      order: 4,
+    },
+    { name: "Sosyal Bilimler", slug: "sosyal-bilimler", order: 5 },
+    { name: "Yabancı Diller", slug: "yabanci-diller", order: 6 },
+    { name: "Kültür Branşları", slug: "kultur-branslari", order: 7 },
+  ];
+
+  for (const category of staffCategories) {
+    await prisma.staffCategory.upsert({
+      where: { slug: category.slug },
+      update: { name: category.name, order: category.order },
+      create: category,
+    });
+  }
+
   console.log("Seed tamamlandı.");
   console.log(`Admin: ${email} / ${password}`);
 }

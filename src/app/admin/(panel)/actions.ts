@@ -123,6 +123,7 @@ export async function saveStaff(formData: FormData) {
   const title = String(formData.get("title") || "");
   const bio = String(formData.get("bio") || "");
   const photoUrl = String(formData.get("photoUrl") || "").trim() || null;
+  const categoryId = String(formData.get("categoryId") || "").trim() || null;
   const order = Number(formData.get("order") || 0);
   const published = formData.get("published") === "on";
 
@@ -130,24 +131,69 @@ export async function saveStaff(formData: FormData) {
     throw new Error("Yeni kadro üyesi için fotoğraf zorunludur.");
   }
 
+  const data = {
+    name,
+    title,
+    bio,
+    photoUrl,
+    order,
+    published,
+    categoryId,
+  };
+
   if (id) {
     await prisma.staff.update({
       where: { id },
-      data: { name, title, bio, photoUrl, order, published },
+      data,
     });
   } else {
     await prisma.staff.create({
-      data: { name, title, bio, photoUrl, order, published },
+      data,
     });
   }
   revalidatePath("/admin/kadro");
   revalidatePath("/hakkimizda");
+  revalidatePath("/kadro");
 }
 
 export async function deleteStaff(formData: FormData) {
   await requireAdmin();
   await prisma.staff.delete({ where: { id: String(formData.get("id")) } });
   revalidatePath("/admin/kadro");
+  revalidatePath("/hakkimizda");
+  revalidatePath("/kadro");
+}
+
+export async function saveStaffCategory(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const name = String(formData.get("name") || "").trim();
+  const order = Number(formData.get("order") || 0);
+  if (!name) throw new Error("Kategori adı gerekli.");
+
+  const slugBase = slugify(name);
+  const slug = slugBase || `kategori-${Date.now()}`;
+
+  if (id) {
+    await prisma.staffCategory.update({
+      where: { id },
+      data: { name, order },
+    });
+  } else {
+    await prisma.staffCategory.create({
+      data: { name, slug, order },
+    });
+  }
+  revalidatePath("/admin/kadro");
+  revalidatePath("/kadro");
+  revalidatePath("/hakkimizda");
+}
+
+export async function deleteStaffCategory(formData: FormData) {
+  await requireAdmin();
+  await prisma.staffCategory.delete({ where: { id: String(formData.get("id")) } });
+  revalidatePath("/admin/kadro");
+  revalidatePath("/kadro");
   revalidatePath("/hakkimizda");
 }
 

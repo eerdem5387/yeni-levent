@@ -1,19 +1,132 @@
 import { prisma } from "@/lib/prisma";
 import { StaffPhotoField } from "@/components/admin/StaffPhotoField";
-import { deleteStaff, saveStaff } from "../actions";
+import {
+  deleteStaff,
+  deleteStaffCategory,
+  saveStaff,
+  saveStaffCategory,
+} from "../actions";
+
+function CategorySelect({
+  categories,
+  defaultValue,
+}: {
+  categories: { id: string; name: string }[];
+  defaultValue?: string | null;
+}) {
+  return (
+    <div>
+      <label className="mb-1 block text-sm font-medium text-navy">Kategori</label>
+      <select
+        name="categoryId"
+        defaultValue={defaultValue ?? ""}
+        className="w-full border border-line px-3 py-2"
+      >
+        <option value="">Kategori seçin</option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 export default async function AdminStaffPage() {
-  const staff = await prisma.staff.findMany({ orderBy: { order: "asc" } });
+  const [staff, categories] = await Promise.all([
+    prisma.staff.findMany({
+      orderBy: [{ order: "asc" }, { name: "asc" }],
+      include: { category: true },
+    }),
+    prisma.staffCategory.findMany({ orderBy: { order: "asc" } }),
+  ]);
 
   return (
     <div className="space-y-10">
       <h1 className="font-[family-name:var(--font-display)] text-3xl text-navy">Kadro</h1>
 
+      <section className="space-y-4 border border-line bg-white p-5">
+        <h2 className="font-semibold text-navy">Kategoriler</h2>
+        <p className="text-sm text-muted">
+          Kaynak sitedeki gibi branş grupları. Üyeleri bu kategorilere atayın.
+        </p>
+        <form action={saveStaffCategory} className="flex flex-wrap items-end gap-3">
+          <div className="min-w-[220px] flex-1">
+            <label className="mb-1 block text-sm font-medium text-navy">Yeni kategori</label>
+            <input
+              name="name"
+              required
+              placeholder="Örn. Matematik"
+              className="w-full border border-line px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
+            <input
+              name="order"
+              type="number"
+              defaultValue={categories.length + 1}
+              className="w-24 border border-line px-3 py-2"
+            />
+          </div>
+          <button className="bg-navy px-4 py-2 text-sm text-white">Ekle</button>
+        </form>
+
+        <div className="space-y-3">
+          {categories.map((category) => (
+            <div
+              key={category.id}
+              className="flex flex-col gap-3 border border-line p-3 sm:flex-row sm:items-end"
+            >
+              <form action={saveStaffCategory} className="flex flex-1 flex-wrap items-end gap-3">
+                <input type="hidden" name="id" value={category.id} />
+                <div className="min-w-[200px] flex-1">
+                  <input
+                    name="name"
+                    defaultValue={category.name}
+                    required
+                    className="w-full border border-line px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <input
+                    name="order"
+                    type="number"
+                    defaultValue={category.order}
+                    className="w-24 border border-line px-3 py-2"
+                  />
+                </div>
+                <button className="bg-navy px-3 py-2 text-sm text-white">Güncelle</button>
+              </form>
+              <form action={deleteStaffCategory}>
+                <input type="hidden" name="id" value={category.id} />
+                <button className="text-sm text-crimson underline">Sil</button>
+              </form>
+            </div>
+          ))}
+          {categories.length === 0 && (
+            <p className="text-sm text-muted">Henüz kategori yok. Seed veya yukarıdan ekleyin.</p>
+          )}
+        </div>
+      </section>
+
       <form action={saveStaff} className="space-y-3 border border-line bg-white p-5">
         <h2 className="font-semibold text-navy">Yeni üye</h2>
         <input name="name" required placeholder="Ad Soyad" className="w-full border border-line px-3 py-2" />
-        <input name="title" required placeholder="Unvan / Branş" className="w-full border border-line px-3 py-2" />
-        <textarea name="bio" rows={3} placeholder="Kısa biyografi" className="w-full border border-line px-3 py-2" />
+        <input
+          name="title"
+          required
+          placeholder="Unvan / Branş"
+          className="w-full border border-line px-3 py-2"
+        />
+        <CategorySelect categories={categories} />
+        <textarea
+          name="bio"
+          rows={3}
+          placeholder="Kısa biyografi"
+          className="w-full border border-line px-3 py-2"
+        />
         <StaffPhotoField required />
         <div>
           <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
@@ -29,13 +142,34 @@ export default async function AdminStaffPage() {
         <div key={member.id} className="border border-line bg-white p-5">
           <form action={saveStaff} className="space-y-3">
             <input type="hidden" name="id" value={member.id} />
-            <input name="name" defaultValue={member.name} required className="w-full border border-line px-3 py-2" />
-            <input name="title" defaultValue={member.title} required className="w-full border border-line px-3 py-2" />
-            <textarea name="bio" defaultValue={member.bio} rows={3} className="w-full border border-line px-3 py-2" />
+            <input
+              name="name"
+              defaultValue={member.name}
+              required
+              className="w-full border border-line px-3 py-2"
+            />
+            <input
+              name="title"
+              defaultValue={member.title}
+              required
+              className="w-full border border-line px-3 py-2"
+            />
+            <CategorySelect categories={categories} defaultValue={member.categoryId} />
+            <textarea
+              name="bio"
+              defaultValue={member.bio}
+              rows={3}
+              className="w-full border border-line px-3 py-2"
+            />
             <StaffPhotoField defaultUrl={member.photoUrl} />
             <div>
               <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
-              <input name="order" type="number" defaultValue={member.order} className="w-32 border border-line px-3 py-2" />
+              <input
+                name="order"
+                type="number"
+                defaultValue={member.order}
+                className="w-32 border border-line px-3 py-2"
+              />
             </div>
             <label className="flex items-center gap-2 text-sm">
               <input name="published" type="checkbox" defaultChecked={member.published} /> Yayında

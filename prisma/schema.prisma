@@ -86,13 +86,23 @@ model Program {
 }
 
 model Staff {
-  id        String  @id @default(cuid())
-  name      String
-  title     String
-  bio       String  @default("")
-  photoUrl  String?
-  order     Int     @default(0)
-  published Boolean @default(true)
+  id         String         @id @default(cuid())
+  name       String
+  title      String
+  bio        String         @default("")
+  photoUrl   String?
+  order      Int            @default(0)
+  published  Boolean        @default(true)
+  categoryId String?
+  category   StaffCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+}
+
+model StaffCategory {
+  id     String  @id @default(cuid())
+  name   String
+  slug   String  @unique
+  order  Int     @default(0)
+  staff  Staff[]
 }
 
 model GalleryAlbum {
