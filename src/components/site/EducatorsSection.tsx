@@ -170,22 +170,22 @@ export function EducatorsSection() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-nowrap items-center gap-2 sm:gap-3">
+          <div className="mt-8 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-3">
             <Link
               href="/hakkimizda"
-              className="btn-primary flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+              className="btn-primary !px-2 !py-2.5 text-center !text-[11px] leading-tight sm:!px-6 sm:!py-3.5 sm:!text-sm"
             >
               Hakkımızda
             </Link>
             <Link
               href="/kadro"
-              className="btn-outline flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+              className="btn-outline !px-2 !py-2.5 text-center !text-[11px] leading-tight sm:!px-6 sm:!py-3.5 sm:!text-sm"
             >
               Kadromuz
             </Link>
             <Link
               href="/etkinlikler"
-              className="btn-outline flex-1 px-3 py-2.5 text-center text-xs sm:flex-none sm:px-6 sm:py-3.5 sm:text-sm"
+              className="btn-outline !px-2 !py-2.5 text-center !text-[11px] leading-tight sm:!px-6 sm:!py-3.5 sm:!text-sm"
             >
               Öğrencilerimiz
             </Link>
