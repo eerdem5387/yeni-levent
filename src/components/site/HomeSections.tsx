@@ -147,7 +147,7 @@ export function ConceptPlusCta() {
       <div className="relative mx-auto flex max-w-[1320px] flex-col items-start justify-between gap-6 px-4 py-12 sm:flex-row sm:items-center sm:px-5 sm:py-14 md:px-8">
         <div>
           <p className="text-sm font-medium text-[#fab123]">Concept +</p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-white sm:text-4xl">
+          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold !text-white sm:text-4xl">
             Zirveyi Keşfet
           </h2>
         </div>
@@ -338,7 +338,7 @@ export function JobsCta() {
     >
       <div className="relative mx-auto flex max-w-[1320px] flex-col gap-6 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-14 md:px-8">
         <div className="max-w-2xl">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-white sm:text-3xl">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold !text-white sm:text-3xl">
             Bizimle Çalışmak İster Misiniz ?
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">
