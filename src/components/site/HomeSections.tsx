@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  homeConceptItems,
   homeHiringBranches,
   homeRankings,
   homeStats,
@@ -163,6 +162,129 @@ export function ConceptPlusCta() {
   );
 }
 
+const conceptFeatures = [
+  {
+    title: "Katman Rehberlik",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden>
+        <circle cx="24" cy="16" r="7" stroke="currentColor" strokeWidth="2.2" />
+        <path
+          d="M10 38c1.8-7 7.2-11 14-11s12.2 4 14 11"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M31 14.5c2.2.4 4 2.4 4 5.2v1.2M31 14.5c0-1.8 1.3-3.5 3.4-3.8"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M34.5 20.5h5.2c.7 0 1.3.6 1.3 1.3v2.2"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Akademik Takip",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden>
+        <path
+          d="M16 8h14a3 3 0 0 1 3 3v29l-10-5.2L13 40V11a3 3 0 0 1 3-3z"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M19 16h10M19 22h10M19 28h7"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Ayrıştırılmış Matematik",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden>
+        <path d="M10 38 30 12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M12 12h10v10" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" />
+        <path
+          d="M28 28h12v12H28z"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinejoin="round"
+        />
+        <path
+          d="m28 34 6-4 6 4v6H28v-6z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path d="M34 8v8M30 12h8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    title: "Çoklu Gelişmiş Yabancı Dil",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden>
+        <rect
+          x="8"
+          y="10"
+          width="32"
+          height="22"
+          rx="2.5"
+          stroke="currentColor"
+          strokeWidth="2.2"
+        />
+        <path d="M18 40h12M24 32v8" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+        <path
+          d="M18 18h4.5c2.2 0 3.8 1.5 3.8 3.5S24.7 25 22.5 25H18V18zm0 7h5"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M28 25c1.6-1 2.6-2.5 2.6-4.2 0-2.6-1.8-4.3-4.4-4.3h-.4"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Ortaokul ve Liseyi 3 Yılda Bitirme",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden>
+        <circle cx="15" cy="14" r="4" stroke="currentColor" strokeWidth="2.2" />
+        <circle cx="24" cy="12" r="4.5" stroke="currentColor" strokeWidth="2.2" />
+        <circle cx="33" cy="14" r="4" stroke="currentColor" strokeWidth="2.2" />
+        <path
+          d="M8 36c1.2-5.5 4.8-8.5 7-8.5s5.5 2.5 7 6.5c1.2-4.8 4.2-8.5 9-8.5s6.5 3.5 8 8.5"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M10.5 18.5 15 16l4.5 2.5M19.5 16.5 24 14l4.5 2.5M28.5 18.5 33 16l4.5 2.5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+] as const;
+
 export function ConceptGrid() {
   return (
     <section className="relative overflow-hidden bg-[#f4f7fb]">
@@ -184,17 +306,17 @@ export function ConceptGrid() {
             kadromuzla geliştirdiğimiz Levent College Concept.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-          {homeConceptItems.map((title, index) => (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
+          {conceptFeatures.map((item) => (
             <article
-              key={title}
-              className="instructor-card flex flex-col items-center px-4 py-7 text-center lg:col-span-2 lg:[&:nth-child(1)]:col-start-2 lg:[&:nth-child(2)]:col-start-4 lg:[&:nth-child(3)]:col-start-1 lg:[&:nth-child(4)]:col-start-3 lg:[&:nth-child(5)]:col-start-5"
+              key={item.title}
+              className="instructor-card flex flex-col items-center px-3 py-6 text-center sm:px-4 sm:py-7 lg:col-span-2 lg:[&:nth-child(1)]:col-start-2 lg:[&:nth-child(2)]:col-start-4 lg:[&:nth-child(3)]:col-start-1 lg:[&:nth-child(4)]:col-start-3 lg:[&:nth-child(5)]:col-start-5"
             >
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#1363df] text-sm font-semibold text-white">
-                {index + 1}
+              <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[#e7effc] text-[#1363df]">
+                {item.icon}
               </div>
-              <h3 className="font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[#082a5e]">
-                {title}
+              <h3 className="font-[family-name:var(--font-display)] text-sm font-semibold leading-snug text-[#082a5e] sm:text-base">
+                {item.title}
               </h3>
             </article>
           ))}
