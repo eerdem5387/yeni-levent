@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { saveUploadedImage } from "@/lib/upload";
+import { saveEventCoverToBlob } from "@/lib/upload";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Dosya seçilmedi." }, { status: 400 });
     }
 
-    const url = await saveUploadedImage(photo, "events");
+    const url = await saveEventCoverToBlob(photo);
     if (!url) {
       return NextResponse.json({ error: "Dosya yüklenemedi." }, { status: 400 });
     }
@@ -31,4 +31,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
-

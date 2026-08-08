@@ -62,6 +62,7 @@ export function EventCoverField({ defaultUrl }: EventCoverFieldProps) {
             alt="Etkinlik görseli"
             fill
             className="object-cover"
+            unoptimized={coverUrl.startsWith("http")}
           />
         </div>
       )}

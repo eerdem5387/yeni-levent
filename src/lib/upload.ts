@@ -28,6 +28,7 @@ export function validateUploadedImage(file: File) {
   return ext;
 }
 
+/** Local disk write — development only (Vercel filesystem is read-only). */
 export async function saveUploadedImage(file: File, folder: string) {
   if (!file.size) return null;
 
@@ -43,25 +44,30 @@ export async function saveUploadedImage(file: File, folder: string) {
   return `/uploads/${folder}/${filename}`;
 }
 
-export async function saveStaffPhotoToBlob(file: File) {
+function hasBlobStore() {
+  return (
+    Boolean(process.env.BLOB_READ_WRITE_TOKEN) ||
+    Boolean(process.env.BLOB_STORE_ID)
+  );
+}
+
+/** Upload to Vercel Blob; falls back to local uploads in development. */
+export async function saveImageToBlob(file: File, folder: string) {
   if (!file.size) return null;
 
   const ext = validateUploadedImage(file);
-  const hasBlobStore =
-    Boolean(process.env.BLOB_READ_WRITE_TOKEN) ||
-    Boolean(process.env.BLOB_STORE_ID);
 
-  if (!hasBlobStore && process.env.NODE_ENV === "development") {
-    return saveUploadedImage(file, "staff");
+  if (!hasBlobStore() && process.env.NODE_ENV === "development") {
+    return saveUploadedImage(file, folder);
   }
 
-  if (!hasBlobStore) {
+  if (!hasBlobStore()) {
     throw new Error(
       "Blob store bağlı değil. Vercel → Storage → Blob → Connect to Project yapın.",
     );
   }
 
-  const pathname = `staff/${randomUUID()}.${ext}`;
+  const pathname = `${folder}/${randomUUID()}.${ext}`;
   const blob = await put(pathname, file, {
     access: "public",
     addRandomSuffix: false,
@@ -71,4 +77,12 @@ export async function saveStaffPhotoToBlob(file: File) {
   });
 
   return blob.url;
+}
+
+export async function saveStaffPhotoToBlob(file: File) {
+  return saveImageToBlob(file, "staff");
+}
+
+export async function saveEventCoverToBlob(file: File) {
+  return saveImageToBlob(file, "events");
 }
