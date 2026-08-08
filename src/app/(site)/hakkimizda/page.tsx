@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PageHero } from "@/components/site/HomeSections";
 import { prisma } from "@/lib/prisma";
 import { publishedStaffWithPhotoWhere } from "@/lib/staff";
 
@@ -15,28 +16,29 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <div className="brand-gradient px-4 pb-12 pt-8 text-white sm:px-5 sm:pb-16 md:px-8">
-        <div className="mx-auto max-w-6xl">
-          <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl">
-            {page?.title ?? "Hakkımızda"}
-          </h1>
-          <div className="gold-rule mt-5" />
-        </div>
-      </div>
+      <PageHero
+        eyebrow="Kurum"
+        title={page?.title ?? "Hakkımızda"}
+        description="Birikimli deneyim, başarıya açılan kapıdır."
+      />
+
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-5 sm:py-16 md:px-8">
-        <div className="space-y-5 whitespace-pre-line text-lg leading-relaxed text-muted">
+        <div className="space-y-5 whitespace-pre-line text-base leading-relaxed text-muted sm:text-lg">
           {page?.content ?? "İçerik yakında eklenecek."}
         </div>
       </div>
 
-      <section id="kadromuz" className="border-t border-line bg-surface/50 px-4 py-12 sm:px-5 sm:py-16 md:px-8">
+      <section
+        id="kadromuz"
+        className="border-t border-line bg-surface/50 px-4 py-12 sm:px-5 sm:py-16 md:px-8"
+      >
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl text-navy md:text-4xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-crimson">
             Kadromuz
-          </h2>
-          <p className="mt-3 max-w-xl text-muted">
-            Birikimli deneyim, başarıya açılan kapıdır.
           </p>
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl text-navy md:text-4xl">
+            Bölgenin en iyi eğitmenleri
+          </h2>
           <div className="gold-rule mt-5" />
           <div className="mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 sm:gap-8 md:grid-cols-3">
             {staff.length === 0 && (
@@ -45,7 +47,7 @@ export default async function AboutPage() {
               </p>
             )}
             {staff.map((member) => (
-              <article key={member.id} className="border-t border-gold pt-6">
+              <article key={member.id} className="border border-line bg-white p-4 pt-5 sm:p-5">
                 <div className="relative mb-4 aspect-square overflow-hidden bg-navy/10">
                   <Image
                     src={member.photoUrl!}

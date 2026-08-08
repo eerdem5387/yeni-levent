@@ -1,20 +1,33 @@
 @import "tailwindcss";
 
+/* Eduvalt / leventokullari.com palette */
 :root {
-  --navy: #003048;
-  --navy-deep: #00243c;
-  --navy-soft: #0a4a66;
-  --crimson: #c0000c;
-  --crimson-soft: #e01824;
-  --gold: #c09018;
-  --gold-light: #d8b448;
-  --cream: #f7f4ef;
-  --ink: #12202a;
-  --muted: #5a6b75;
+  --primary: #1363df;
+  --primary-soft: #2494e4;
+  --secondary: #082a5e;
+  --secondary-deep: #061e43;
+  --yellow: #fab123;
+  --body: #39557e;
+  --gray: #e7effc;
+  --gray-2: #f4f7fb;
+  --gray-3: #f5f7fb;
   --surface: #ffffff;
-  --line: rgba(0, 48, 72, 0.12);
-  --background: var(--cream);
-  --foreground: var(--ink);
+  --border: #d0dae9;
+  --line: rgba(8, 42, 94, 0.12);
+
+  /* Compatibility aliases used across components */
+  --navy: var(--secondary);
+  --navy-deep: var(--secondary-deep);
+  --navy-soft: var(--primary);
+  --crimson: var(--primary);
+  --crimson-soft: var(--primary-soft);
+  --gold: var(--yellow);
+  --gold-light: #ffc94a;
+  --cream: var(--gray-2);
+  --ink: var(--secondary);
+  --muted: var(--body);
+  --background: var(--gray-2);
+  --foreground: var(--body);
 }
 
 @theme inline {
@@ -32,6 +45,10 @@
   --color-muted: var(--muted);
   --color-surface: var(--surface);
   --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-yellow: var(--yellow);
+  --color-gray: var(--gray);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
 }
@@ -47,25 +64,105 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-body), "Hind", system-ui, sans-serif;
+  line-height: 1.75;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display), "Lexend Deca", system-ui, sans-serif;
+  color: var(--secondary);
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--crimson) 22%, white);
-  color: var(--navy-deep);
+  background: color-mix(in srgb, var(--primary) 22%, white);
+  color: var(--secondary-deep);
 }
 
 .brand-gradient {
   background:
-    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(192, 0, 12, 0.28), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 85% 15%, rgba(192, 144, 24, 0.22), transparent 50%),
-    linear-gradient(145deg, #00243c 0%, #003048 45%, #0a4a66 100%);
+    linear-gradient(180deg, rgba(231, 239, 252, 0.92) 0%, rgba(244, 247, 251, 0.96) 100%),
+    url("/theme/banner_bg.jpg") center / cover no-repeat;
 }
 
 .gold-rule {
-  height: 2px;
+  height: 3px;
   width: 4.5rem;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--yellow), transparent);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.875rem;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-soft);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background: #fff;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.875rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.pill {
+  display: inline-block;
+  line-height: 1;
+  background: var(--gray);
+  color: var(--secondary);
+  border-radius: 4px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.fact-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 1rem 1.15rem;
+  box-shadow: 0 10px 30px rgba(8, 42, 94, 0.1);
+}
+
+.instructor-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(8, 42, 94, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.instructor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(19, 99, 223, 0.14);
 }
 
 @keyframes rise-in {
@@ -88,6 +185,16 @@ body {
   }
 }
 
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .animate-rise {
   animation: rise-in 0.8s ease-out both;
 }
@@ -104,66 +211,10 @@ body {
   animation: rise-in 0.9s ease-out 0.3s both;
 }
 
-.hero-student-mask {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 70%,
-    rgba(0, 0, 0, 0.85) 80%,
-    rgba(0, 0, 0, 0.45) 90%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 70%,
-    rgba(0, 0, 0, 0.85) 80%,
-    rgba(0, 0, 0, 0.45) 90%,
-    transparent 100%
-  );
+.animate-float {
+  animation: float-y 4s ease-in-out infinite;
 }
 
-@media (min-width: 1024px) {
-  .hero-student-mask {
-    -webkit-mask-image:
-      linear-gradient(
-        to bottom,
-        #000 0%,
-        #000 62%,
-        rgba(0, 0, 0, 0.95) 72%,
-        rgba(0, 0, 0, 0.75) 80%,
-        rgba(0, 0, 0, 0.45) 88%,
-        rgba(0, 0, 0, 0.15) 95%,
-        transparent 100%
-      ),
-      linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(0, 0, 0, 0.15) 4%,
-        rgba(0, 0, 0, 0.55) 10%,
-        #000 18%,
-        #000 100%
-      );
-    mask-image:
-      linear-gradient(
-        to bottom,
-        #000 0%,
-        #000 62%,
-        rgba(0, 0, 0, 0.95) 72%,
-        rgba(0, 0, 0, 0.75) 80%,
-        rgba(0, 0, 0, 0.45) 88%,
-        rgba(0, 0, 0, 0.15) 95%,
-        transparent 100%
-      ),
-      linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(0, 0, 0, 0.15) 4%,
-        rgba(0, 0, 0, 0.55) 10%,
-        #000 18%,
-        #000 100%
-      );
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-  }
+.animate-float-slow {
+  animation: float-y 5.5s ease-in-out infinite;
 }

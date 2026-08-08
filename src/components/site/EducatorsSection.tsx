@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const features = [
   {
-    title: "Sınırsız Kaynak",
-    color: "bg-navy/8 text-navy",
+    title: "Sınırsız\nKaynak",
+    color: "bg-[#e7effc] text-[#1363df]",
     icon: (
       <svg viewBox="0 0 48 48" className="h-7 w-7" fill="none" aria-hidden>
         <path
@@ -23,8 +24,8 @@ const features = [
     ),
   },
   {
-    title: "Çözüm Odaklı",
-    color: "bg-navy-soft/10 text-navy-soft",
+    title: "Çözüm\nOdaklı",
+    color: "bg-[#fff4db] text-[#c98a00]",
     icon: (
       <svg viewBox="0 0 48 48" className="h-7 w-7" fill="none" aria-hidden>
         <path
@@ -44,8 +45,8 @@ const features = [
     ),
   },
   {
-    title: "Yüksek Başarı",
-    color: "bg-gold/12 text-gold",
+    title: "Yüksek\nBaşarı",
+    color: "bg-[#e8f8ef] text-[#12bb6a]",
     icon: (
       <svg viewBox="0 0 48 48" className="h-7 w-7" fill="none" aria-hidden>
         <path
@@ -64,8 +65,8 @@ const features = [
     ),
   },
   {
-    title: "Destekleyici Videolar",
-    color: "bg-crimson/8 text-crimson",
+    title: "Destekleyici\nVideolar",
+    color: "bg-[#f3e8ff] text-[#9b51e0]",
     icon: (
       <svg viewBox="0 0 48 48" className="h-7 w-7" fill="none" aria-hidden>
         <rect
@@ -85,30 +86,30 @@ const features = [
 
 export function EducatorsSection() {
   return (
-    <section className="overflow-hidden border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:gap-12 sm:px-5 sm:py-20 md:px-8 lg:grid-cols-2 lg:items-center">
+    <section className="overflow-hidden bg-white">
+      <div className="mx-auto grid max-w-[1320px] gap-10 px-4 py-14 sm:gap-12 sm:px-5 sm:py-20 md:px-8 lg:grid-cols-2 lg:items-center">
         <div className="relative mx-auto w-full max-w-md pb-16 sm:pb-20 lg:max-w-none lg:pb-0">
-          <div
-            className="pointer-events-none absolute -left-2 top-2 grid grid-cols-5 gap-1.5 opacity-25 sm:-left-6"
+          <Image
+            src="/theme/about_dots.svg"
+            alt=""
+            width={120}
+            height={120}
+            className="pointer-events-none absolute -left-2 top-6 w-20 opacity-70 sm:-left-4 sm:w-28"
             aria-hidden
-          >
-            {Array.from({ length: 20 }).map((_, index) => (
-              <span key={index} className="h-1.5 w-1.5 rounded-full bg-navy/40" />
-            ))}
-          </div>
+          />
 
           <div
-            className="pointer-events-none absolute -left-2 top-0 h-36 w-36 rounded-full border-[10px] border-gold/35 sm:-left-4 sm:h-44 sm:w-44"
+            className="pointer-events-none absolute -left-2 top-0 h-36 w-36 rounded-full border-[10px] border-[#fab123]/40 sm:-left-4 sm:h-44 sm:w-44"
             style={{ clipPath: "inset(0 50% 50% 0)" }}
             aria-hidden
           />
 
           <div className="relative mx-auto w-[88%] max-w-sm pt-6 sm:ml-auto sm:pt-10">
-            <div className="relative z-10 overflow-hidden border-4 border-white shadow-[0_20px_50px_rgba(0,48,72,0.15)]">
+            <div className="relative z-10 overflow-hidden rounded-2xl border-4 border-white shadow-[0_20px_50px_rgba(8,42,94,0.12)]">
               <div className="relative aspect-[3/4] w-full">
                 <Image
-                  src="/kamerhoca.png"
-                  alt="Levent Koleji eğitmen kadrosu"
+                  src="/theme/kamerhoca-e1724766207132.png"
+                  alt="Levent College eğitmen kadrosu"
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 380px"
@@ -116,39 +117,40 @@ export function EducatorsSection() {
               </div>
             </div>
 
-            <div className="absolute -bottom-6 left-0 z-20 w-[42%] overflow-hidden border-4 border-white shadow-[0_16px_40px_rgba(0,48,72,0.18)] sm:-left-8 sm:w-[46%]">
+            <div className="absolute -bottom-6 left-0 z-20 w-[42%] overflow-hidden rounded-2xl border-4 border-white shadow-[0_16px_40px_rgba(8,42,94,0.14)] sm:-left-8 sm:w-[46%]">
               <div className="relative aspect-square w-full">
                 <Image
-                  src="/burakhoca.png"
-                  alt="Levent Koleji eğitmen kadrosu"
+                  src="/theme/burak-hoca-web-yeni.png"
+                  alt="Levent College eğitmen kadrosu"
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 640px) 35vw, 180px"
                 />
               </div>
             </div>
+
+            <div className="absolute -right-2 bottom-8 z-20 hidden rounded-xl bg-[#1363df] px-4 py-3 text-white shadow-lg sm:block">
+              <p className="font-[family-name:var(--font-display)] text-lg font-semibold leading-none">
+                Concept +
+              </p>
+              <p className="mt-1 text-xs text-white/85">Zirveyi Keşfet</p>
+            </div>
           </div>
         </div>
 
         <div>
-          <p className="inline-block bg-navy/8 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-navy">
-            Hakkımızda Bilgi Edinir
-          </p>
-          <h2 className="mt-4 font-[family-name:var(--font-display)] text-2xl leading-tight text-navy sm:mt-5 sm:text-3xl md:text-4xl">
+          <p className="pill">Hakkımızda Bilgi Edinin</p>
+          <h2 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight text-[#082a5e] sm:mt-5 sm:text-3xl md:text-4xl">
             Bölgenin En İyi{" "}
-            <span className="relative inline-block">
+            <span className="relative inline-block text-[#1363df]">
               Eğitmenleri
               <span
-                className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, var(--gold), var(--gold-light), transparent)",
-                }}
+                className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gradient-to-r from-[#fab123] to-transparent"
                 aria-hidden
               />
             </span>
           </h2>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-muted sm:mt-6 md:text-lg">
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-[#39557e] sm:mt-6 md:text-lg">
             Birikimli deneyim, başarıya açılan kapıdır. Okulumuz, uzman kadrosuyla
             eğitimde mükemmelliği hedefler. Başarı, bizim DNA&apos;mızın bir parçasıdır.
           </p>
@@ -157,15 +159,27 @@ export function EducatorsSection() {
             {features.map((feature) => (
               <article key={feature.title} className="flex items-center gap-3 sm:gap-4">
                 <div
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14 ${feature.color}`}
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full sm:h-16 sm:w-16 ${feature.color}`}
                 >
                   {feature.icon}
                 </div>
-                <h3 className="font-[family-name:var(--font-display)] text-base text-navy sm:text-lg">
+                <h3 className="whitespace-pre-line font-[family-name:var(--font-display)] text-base font-semibold text-[#082a5e] sm:text-lg">
                   {feature.title}
                 </h3>
               </article>
             ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/hakkimizda" className="btn-primary">
+              Hakkımızda
+            </Link>
+            <Link href="/kadro" className="btn-outline">
+              Kadromuz
+            </Link>
+            <Link href="/etkinlikler" className="btn-outline">
+              Öğrencilerimiz
+            </Link>
           </div>
         </div>
       </div>

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Hind_Vadodara, Libre_Baskerville } from "next/font/google";
+import { Hind, Lexend_Deca } from "next/font/google";
 import "./globals.css";
 
-const display = Libre_Baskerville({
+const display = Lexend_Deca({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const body = Hind_Vadodara({
+const body = Hind({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -16,20 +16,11 @@ const body = Hind_Vadodara({
 
 export const metadata: Metadata = {
   title: {
-    default: "Levent Koleji",
-    template: "%s | Levent Koleji",
+    default: "Levent College Concept – Levent College",
+    template: "%s | Levent College",
   },
   description:
-    "Levent Koleji — akademik başarı, rehberlik ve karakter gelişimini bir arada sunan eğitim kurumu.",
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
-      { url: "/favicon.png", type: "image/png", sizes: "48x48" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
-  },
+    "Levent College Concept — akademik başarı, rehberlik ve karakter gelişimini bir arada sunan eğitim kurumu.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

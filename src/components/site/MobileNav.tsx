@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { NavItem } from "@/lib/nav";
 
-type NavItem = { href: string; label: string };
+function isExternal(href: string) {
+  return href.startsWith("http");
+}
 
 export function MobileNav({ items }: { items: NavItem[] }) {
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -16,13 +20,13 @@ export function MobileNav({ items }: { items: NavItem[] }) {
   }, [open]);
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <button
         type="button"
         aria-expanded={open}
         aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-white/25 text-white transition hover:bg-white/10"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-[#d0dae9] text-[#082a5e] transition hover:bg-[#e7effc]"
       >
         {open ? (
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
@@ -48,41 +52,102 @@ export function MobileNav({ items }: { items: NavItem[] }) {
       {open && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/50"
+            className="fixed inset-0 z-40 bg-[#061e43]/45"
             onClick={() => setOpen(false)}
             aria-hidden
           />
           <nav
-            className="fixed inset-x-0 top-[4.5rem] z-50 max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-b border-white/10 bg-navy-deep/98 shadow-2xl backdrop-blur-md sm:top-[5rem] sm:max-h-[calc(100dvh-5rem)]"
+            className="fixed inset-x-0 top-[4.25rem] z-50 max-h-[calc(100dvh-4.25rem)] overflow-y-auto border-b border-[#d0dae9] bg-white shadow-lg sm:top-[4.75rem] sm:max-h-[calc(100dvh-4.75rem)]"
             aria-label="Mobil menü"
           >
             {items.map((item) => {
-              const className =
-                "block px-5 py-3.5 text-sm text-white/90 transition hover:bg-white/10 sm:text-base";
-
-              if (item.href.startsWith("http")) {
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className={className}
-                    rel="noopener noreferrer"
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                );
-              }
+              const key = `${item.href}-${item.label}`;
+              const hasChildren = Boolean(item.children?.length);
 
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={className}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
+                <div key={key} className="border-b border-[#e7effc]">
+                  <div className="flex items-center">
+                    {isExternal(item.href) ? (
+                      <a
+                        href={item.href}
+                        rel="noopener noreferrer"
+                        className="flex-1 px-5 py-3.5 text-sm font-medium text-[#082a5e]"
+                        onClick={() => setOpen(false)}
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="flex-1 px-5 py-3.5 text-sm font-medium text-[#082a5e]"
+                        onClick={() => setOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                    {hasChildren ? (
+                      <button
+                        type="button"
+                        className="px-4 py-3.5 text-[#1363df]"
+                        aria-label={`${item.label} alt menü`}
+                        onClick={() =>
+                          setExpanded((prev) => (prev === key ? null : key))
+                        }
+                      >
+                        {expanded === key ? "−" : "+"}
+                      </button>
+                    ) : null}
+                  </div>
+
+                  {hasChildren && expanded === key ? (
+                    <div className="bg-[#f4f7fb] pb-2">
+                      {item.children!.map((child) => (
+                        <div key={`${child.href}-${child.label}`}>
+                          {isExternal(child.href) ? (
+                            <a
+                              href={child.href}
+                              rel="noopener noreferrer"
+                              className="block px-8 py-2.5 text-sm text-[#39557e]"
+                              onClick={() => setOpen(false)}
+                            >
+                              {child.label}
+                            </a>
+                          ) : (
+                            <Link
+                              href={child.href}
+                              className="block px-8 py-2.5 text-sm text-[#39557e]"
+                              onClick={() => setOpen(false)}
+                            >
+                              {child.label}
+                            </Link>
+                          )}
+                          {child.children?.map((grand) =>
+                            isExternal(grand.href) ? (
+                              <a
+                                key={`${grand.href}-${grand.label}`}
+                                href={grand.href}
+                                rel="noopener noreferrer"
+                                className="block px-12 py-2 text-xs text-[#39557e]/80"
+                                onClick={() => setOpen(false)}
+                              >
+                                {grand.label}
+                              </a>
+                            ) : (
+                              <Link
+                                key={`${grand.href}-${grand.label}`}
+                                href={grand.href}
+                                className="block px-12 py-2 text-xs text-[#39557e]/80"
+                                onClick={() => setOpen(false)}
+                              >
+                                {grand.label}
+                              </Link>
+                            ),
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               );
             })}
           </nav>

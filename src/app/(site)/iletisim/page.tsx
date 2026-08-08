@@ -1,4 +1,5 @@
-﻿import { ContactForm } from "@/components/site/ContactForm";
+import { ContactForm } from "@/components/site/ContactForm";
+import { PageHero } from "@/components/site/HomeSections";
 import { siteContact } from "@/lib/contact";
 
 export const metadata = { title: "İletişim" };
@@ -6,20 +7,11 @@ export const metadata = { title: "İletişim" };
 export default async function ContactPage() {
   return (
     <div>
-      <div className="brand-gradient px-4 pb-10 pt-8 text-white sm:px-5 sm:pb-14 md:px-8 md:pb-16">
-        <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light">
-            İletişim
-          </p>
-          <h1 className="mt-3 font-[family-name:var(--font-display)] text-3xl leading-tight sm:text-4xl md:text-5xl">
-            Bizimle İletişime Geç
-          </h1>
-          <div className="gold-rule mt-5 opacity-90" />
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
-            Sorularınız, kayıt ve ziyaret talepleriniz için bize ulaşın.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        eyebrow="İletişim"
+        title="Bizimle İletişime Geç"
+        description="Sorularınız, kayıt ve ziyaret talepleriniz için bize ulaşın."
+      />
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:gap-12 sm:px-5 sm:py-14 md:grid-cols-2 md:gap-14 md:px-8 md:py-16">
         <div>

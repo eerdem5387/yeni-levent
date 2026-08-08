@@ -33,7 +33,13 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-cream px-4">
       <div className="w-full max-w-md border border-line bg-white p-8 shadow-sm">
         <div className="mb-8 flex flex-col items-center text-center">
-          <Image src="/logo.png" alt="Levent Koleji" width={72} height={72} />
+          <Image
+            src="/theme/levent-akademik-logo.png"
+            alt="Levent Koleji"
+            width={100}
+            height={100}
+            className="h-16 w-auto"
+          />
           <h1 className="mt-4 font-[family-name:var(--font-display)] text-2xl text-navy">
             Yönetim Paneli
           </h1>
