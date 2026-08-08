@@ -42,6 +42,19 @@ export default async function AdminStaffPage() {
     prisma.staffCategory.findMany({ orderBy: { order: "asc" } }),
   ]);
 
+  const groupedStaff = [
+    ...categories.map((category) => ({
+      key: category.id,
+      title: category.name,
+      members: staff.filter((member) => member.categoryId === category.id),
+    })),
+    {
+      key: "uncategorized",
+      title: "Kategorisiz",
+      members: staff.filter((member) => !member.categoryId),
+    },
+  ].filter((group) => group.members.length > 0);
+
   return (
     <div className="space-y-10">
       <h1 className="font-[family-name:var(--font-display)] text-3xl text-navy">Kadro</h1>
@@ -129,7 +142,9 @@ export default async function AdminStaffPage() {
         />
         <StaffPhotoField required />
         <div>
-          <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
+          <label className="mb-1 block text-sm font-medium text-navy">
+            Sıra <span className="font-normal text-muted">(küçük sayı = daha önde)</span>
+          </label>
           <input name="order" type="number" defaultValue={0} className="w-32 border border-line px-3 py-2" />
         </div>
         <label className="flex items-center gap-2 text-sm">
@@ -138,49 +153,71 @@ export default async function AdminStaffPage() {
         <button className="bg-navy px-4 py-2 text-sm text-white">Kaydet</button>
       </form>
 
-      {staff.map((member) => (
-        <div key={member.id} className="border border-line bg-white p-5">
-          <form action={saveStaff} className="space-y-3">
-            <input type="hidden" name="id" value={member.id} />
-            <input
-              name="name"
-              defaultValue={member.name}
-              required
-              className="w-full border border-line px-3 py-2"
-            />
-            <input
-              name="title"
-              defaultValue={member.title}
-              required
-              className="w-full border border-line px-3 py-2"
-            />
-            <CategorySelect categories={categories} defaultValue={member.categoryId} />
-            <textarea
-              name="bio"
-              defaultValue={member.bio}
-              rows={3}
-              className="w-full border border-line px-3 py-2"
-            />
-            <StaffPhotoField defaultUrl={member.photoUrl} />
-            <div>
-              <label className="mb-1 block text-sm font-medium text-navy">Sıra</label>
-              <input
-                name="order"
-                type="number"
-                defaultValue={member.order}
-                className="w-32 border border-line px-3 py-2"
-              />
+      {groupedStaff.map((group) => (
+        <section key={group.key} className="space-y-4">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="font-[family-name:var(--font-display)] text-xl text-navy">
+              {group.title}
+            </h2>
+            <p className="text-xs text-muted">Sıraya göre listelenir</p>
+          </div>
+          {group.members.map((member) => (
+            <div key={member.id} className="border border-line bg-white p-5">
+              <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+                <span className="rounded bg-navy/8 px-2 py-1 font-semibold text-navy">
+                  Sıra: {member.order}
+                </span>
+                {member.category ? (
+                  <span className="rounded bg-[#e7effc] px-2 py-1 text-[#1363df]">
+                    {member.category.name}
+                  </span>
+                ) : null}
+              </div>
+              <form action={saveStaff} className="space-y-3">
+                <input type="hidden" name="id" value={member.id} />
+                <input
+                  name="name"
+                  defaultValue={member.name}
+                  required
+                  className="w-full border border-line px-3 py-2"
+                />
+                <input
+                  name="title"
+                  defaultValue={member.title}
+                  required
+                  className="w-full border border-line px-3 py-2"
+                />
+                <CategorySelect categories={categories} defaultValue={member.categoryId} />
+                <textarea
+                  name="bio"
+                  defaultValue={member.bio}
+                  rows={3}
+                  className="w-full border border-line px-3 py-2"
+                />
+                <StaffPhotoField defaultUrl={member.photoUrl} />
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-navy">
+                    Sıra <span className="font-normal text-muted">(küçük sayı = daha önde)</span>
+                  </label>
+                  <input
+                    name="order"
+                    type="number"
+                    defaultValue={member.order}
+                    className="w-32 border border-line px-3 py-2"
+                  />
+                </div>
+                <label className="flex items-center gap-2 text-sm">
+                  <input name="published" type="checkbox" defaultChecked={member.published} /> Yayında
+                </label>
+                <button className="bg-navy px-4 py-2 text-sm text-white">Güncelle</button>
+              </form>
+              <form action={deleteStaff} className="mt-2">
+                <input type="hidden" name="id" value={member.id} />
+                <button className="text-sm text-crimson underline">Sil</button>
+              </form>
             </div>
-            <label className="flex items-center gap-2 text-sm">
-              <input name="published" type="checkbox" defaultChecked={member.published} /> Yayında
-            </label>
-            <button className="bg-navy px-4 py-2 text-sm text-white">Güncelle</button>
-          </form>
-          <form action={deleteStaff} className="mt-2">
-            <input type="hidden" name="id" value={member.id} />
-            <button className="text-sm text-crimson underline">Sil</button>
-          </form>
-        </div>
+          ))}
+        </section>
       ))}
     </div>
   );
