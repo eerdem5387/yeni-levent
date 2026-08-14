@@ -10,7 +10,6 @@ import {
 import {
   homeHiringBranches,
   homeRankings,
-  homeStats,
 } from "@/lib/home-content";
 
 export function HiringBanners() {
@@ -378,25 +377,3 @@ export function PageHero({
   );
 }
 
-export function StatsStrip({ compact = false }: { compact?: boolean }) {
-  return (
-    <section className={`bg-[#082a5e] text-white ${compact ? "py-8 sm:py-10" : "py-12 sm:py-14"}`}>
-      <div className="mx-auto grid max-w-[1320px] gap-8 px-4 sm:grid-cols-2 sm:gap-10 sm:px-5 md:px-8">
-        {homeStats.map((stat) => (
-          <div key={stat.label} className="border-t border-[#fab123]/50 pt-5 text-center sm:text-left">
-            <p
-              className={`font-[family-name:var(--font-display)] text-[#fab123] ${
-                compact ? "text-4xl sm:text-5xl" : "text-5xl sm:text-6xl"
-              }`}
-            >
-              {stat.value}
-            </p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}

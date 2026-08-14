@@ -1,10 +1,5 @@
 /** Legitimate homepage content mirrored from leventokullari.com (no spam). */
 
-export const homeStats = [
-  { label: "Toplam Öğrenci", value: "433" },
-  { label: "Mezun Öğrenci", value: "460" },
-] as const;
-
 export const homeRankings = [
   {
     name: "Kerem Yavuz Kaya",
@@ -27,11 +22,3 @@ export const homeRankings = [
 ] as const;
 
 export const homeHiringBranches = ["Kimya", "Fizik", "Matematik"] as const;
-
-export const homeConceptItems = [
-  "Katman Rehberlik",
-  "Akademik Takip",
-  "Ayrıştırılmış Matematik",
-  "Çoklu Gelişmiş Yabancı Dil",
-  "Ortaokul ve Liseyi 3 Yılda Bitirme",
-] as const;
