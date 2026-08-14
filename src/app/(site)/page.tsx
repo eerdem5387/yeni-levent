@@ -129,34 +129,6 @@ export default async function HomePage() {
                 sizes="(max-width: 768px) 420px, 560px"
               />
             </div>
-
-            <div className="fact-card absolute bottom-[18%] left-0 z-[2] flex items-center gap-3 sm:left-2">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#e7effc] text-[#1363df]">
-                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
-                  <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4 0-8 2-8 4v2h16v-2c0-2-4-4-8-4z" />
-                </svg>
-              </span>
-              <div>
-                <p className="text-sm text-[#39557e]">Toplam Öğrenci</p>
-                <p className="font-[family-name:var(--font-display)] text-[30px] font-bold leading-none tracking-tight text-[#082a5e]">
-                  433
-                </p>
-              </div>
-            </div>
-
-            <div className="fact-card absolute bottom-[42%] right-0 z-[2] flex min-w-[150px] items-center gap-3 sm:right-2">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fff4db] text-[#fab123]">
-                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
-                  <path d="M5 4v2h14V4H5zm1 4v12h12V8H6zm2 2h8v2H8v-2zm0 4h8v2H8v-2z" />
-                </svg>
-              </span>
-              <div>
-                <p className="text-sm text-[#39557e]">Mezun Öğrenci</p>
-                <p className="font-[family-name:var(--font-display)] text-[30px] font-bold leading-none tracking-tight text-[#082a5e]">
-                  460
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
