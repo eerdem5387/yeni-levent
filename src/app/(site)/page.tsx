@@ -8,7 +8,6 @@ import {
   HomeEvents,
   JobsCta,
   RankingsGrid,
-  YksPromoBanner,
 } from "@/components/site/HomeSections";
 import { homeRankings } from "@/lib/home-content";
 import { prisma } from "@/lib/prisma";
@@ -134,7 +133,6 @@ export default async function HomePage() {
       </section>
 
       <RankingsGrid />
-      <YksPromoBanner />
       <BranchesHiring />
       <ConceptPlusCta />
       <EducatorsSection />

@@ -70,25 +70,6 @@ export function RankingsGrid() {
   );
 }
 
-export function YksPromoBanner() {
-  return (
-    <section className="bg-[#f4f7fb]">
-      <div className="mx-auto max-w-[1320px] px-4 py-6 sm:px-5 sm:py-8 md:px-8">
-        <div className="overflow-hidden rounded-xl shadow-[0_8px_24px_rgba(8,42,94,0.08)]">
-          <Image
-            src="/theme/yks-promo-banner.jpeg"
-            alt="Levent College YKS başarıları"
-            width={1600}
-            height={969}
-            className="h-auto w-full"
-            sizes="(max-width: 1320px) 100vw, 1320px"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function BranchesHiring() {
   return (
     <section className="relative overflow-hidden bg-white">
