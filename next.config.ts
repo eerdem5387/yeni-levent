@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { applyEnvFallbacks } from "./src/lib/env";
+
+applyEnvFallbacks();
 
 const nextConfig: NextConfig = {
   images: {

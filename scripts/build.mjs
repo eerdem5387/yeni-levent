@@ -1,7 +1,44 @@
 import { execSync } from "node:child_process";
 
-const realDatabaseUrl = process.env.DATABASE_URL;
-const realDirectUrl = process.env.DIRECT_URL;
+function nonempty(value) {
+  const trimmed = value?.trim?.() ?? value;
+  return trimmed ? trimmed : undefined;
+}
+
+function resolveDatabaseUrl() {
+  return (
+    nonempty(process.env.DATABASE_URL) ??
+    nonempty(process.env.POSTGRES_PRISMA_URL) ??
+    nonempty(process.env.POSTGRES_URL)
+  );
+}
+
+function resolveDirectUrl() {
+  return (
+    nonempty(process.env.DIRECT_URL) ??
+    nonempty(process.env.DATABASE_URL_UNPOOLED) ??
+    nonempty(process.env.POSTGRES_URL_NON_POOLING) ??
+    resolveDatabaseUrl()
+  );
+}
+
+const realDatabaseUrl = resolveDatabaseUrl();
+const realDirectUrl = resolveDirectUrl();
+
+if (realDatabaseUrl) process.env.DATABASE_URL = realDatabaseUrl;
+if (realDirectUrl) process.env.DIRECT_URL = realDirectUrl;
+
+if (!nonempty(process.env.NEXTAUTH_URL) && nonempty(process.env.VERCEL_URL)) {
+  const host = process.env.VERCEL_URL;
+  process.env.NEXTAUTH_URL = host.startsWith("http") ? host : `https://${host}`;
+}
+
+if (!nonempty(process.env.NEXTAUTH_SECRET)) {
+  console.warn(
+    "[build] NEXTAUTH_SECRET tanımlı değil — build için geçici değer kullanılıyor. Vercel Environment Variables'a ekleyin.",
+  );
+  process.env.NEXTAUTH_SECRET = "vercel-build-placeholder-set-NEXTAUTH_SECRET";
+}
 
 // generate only needs env vars to exist — not a live database connection
 const generateEnv = {
@@ -31,12 +68,17 @@ function tryRun(command, env = process.env) {
 run("npx prisma generate", generateEnv);
 
 if (realDatabaseUrl) {
-  const migrated = tryRun("npx prisma migrate deploy");
+  const migrateEnv = {
+    ...process.env,
+    DATABASE_URL: realDatabaseUrl,
+    DIRECT_URL: realDirectUrl ?? realDatabaseUrl,
+  };
+  const migrated = tryRun("npx prisma migrate deploy", migrateEnv);
   if (!migrated) {
     console.warn(
       "[build] prisma migrate deploy başarısız — db push ile devam ediliyor.",
     );
-    tryRun("npx prisma db push --skip-generate");
+    tryRun("npx prisma db push --skip-generate", migrateEnv);
   }
 } else {
   console.warn(

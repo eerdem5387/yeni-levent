@@ -1,4 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { applyEnvFallbacks } from "./env";
+
+applyEnvFallbacks();
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
