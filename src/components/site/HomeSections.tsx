@@ -12,9 +12,31 @@ import {
   homeRankings,
 } from "@/lib/home-content";
 
+const hiringBranchButtons = [
+  "Edebiyat",
+  "Matematik",
+  "Coğrafya",
+  "Bilişim",
+  "Fen Bilimleri",
+] as const;
+
 export function HiringBanners() {
   return (
     <div className="space-y-0">
+      <div className="bg-white px-4 py-4 sm:px-5 sm:py-5 md:px-8">
+        <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+          {hiringBranchButtons.map((label) => (
+            <a
+              key={label}
+              href="https://ik.leventokullari.com/"
+              rel="noopener noreferrer"
+              className="inline-flex min-w-[140px] items-center justify-center rounded-md bg-[#16a34a] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-[#15803d] sm:min-w-[150px] sm:px-5 sm:py-3 sm:text-base"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </div>
       <a
         href="https://ik.leventokullari.com/"
         rel="noopener noreferrer"
