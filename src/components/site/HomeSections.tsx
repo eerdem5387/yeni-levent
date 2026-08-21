@@ -7,10 +7,7 @@ import {
   Rocket,
   SquareFunction,
 } from "lucide-react";
-import {
-  homeHiringBranches,
-  homeRankings,
-} from "@/lib/home-content";
+import { homeGalleryImages, homeRankings } from "@/lib/home-content";
 
 const hiringBranchButtons = [
   "Edebiyat",
@@ -92,52 +89,24 @@ export function RankingsGrid() {
   );
 }
 
-export function BranchesHiring() {
+export function HomeGallery() {
   return (
-    <section className="relative overflow-hidden bg-white">
-      <Image
-        src="/theme/categories_shape01.png"
-        alt=""
-        width={80}
-        height={80}
-        className="pointer-events-none absolute left-4 top-8 w-16 opacity-70 sm:w-20"
-        aria-hidden
-      />
-      <Image
-        src="/theme/categories_shape02-1.png"
-        alt=""
-        width={96}
-        height={96}
-        className="pointer-events-none absolute bottom-6 right-6 w-20 opacity-70 sm:w-24"
-        aria-hidden
-      />
-      <div className="relative mx-auto max-w-[1320px] px-4 py-14 sm:px-5 sm:py-16 md:px-8">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[#082a5e] sm:text-3xl">
-              Çalışma Arkadaşları Arıyoruz
-            </h2>
+    <section className="bg-white">
+      <div className="mx-auto grid max-w-[1320px] grid-cols-2 gap-2 px-2 py-4 sm:gap-3 sm:px-4 sm:py-6 md:grid-cols-4 md:px-8">
+        {homeGalleryImages.map((src, index) => (
+          <div
+            key={src}
+            className="relative aspect-[9/16] overflow-hidden rounded-lg bg-[#e7effc]"
+          >
+            <Image
+              src={src}
+              alt={`Levent College görsel ${index + 1}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
           </div>
-          <a href="https://ik.leventokullari.com/" rel="noopener noreferrer" className="btn-primary">
-            Başvuru için Tıklayın
-          </a>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          {homeHiringBranches.map((branch, index) => (
-            <a
-              key={branch}
-              href="https://ik.leventokullari.com/"
-              rel="noopener noreferrer"
-              className={
-                index === 1
-                  ? "btn-outline min-w-[140px]"
-                  : "btn-primary min-w-[140px]"
-              }
-            >
-              {branch}
-            </a>
-          ))}
-        </div>
+        ))}
       </div>
     </section>
   );

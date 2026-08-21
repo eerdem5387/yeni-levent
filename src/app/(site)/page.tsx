@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { EducatorsSection } from "@/components/site/EducatorsSection";
 import {
-  BranchesHiring,
   ConceptGrid,
   ConceptPlusCta,
   HiringBanners,
   HomeEvents,
+  HomeGallery,
   JobsCta,
   RankingsGrid,
 } from "@/components/site/HomeSections";
@@ -133,7 +133,7 @@ export default async function HomePage() {
       </section>
 
       <RankingsGrid />
-      <BranchesHiring />
+      <HomeGallery />
       <ConceptPlusCta />
       <EducatorsSection />
       <JobsCta />

@@ -21,4 +21,10 @@ export const homeRankings = [
   },
 ] as const;
 
-export const homeHiringBranches = ["Kimya", "Fizik", "Matematik"] as const;
+/** Homepage gallery images hosted on Vercel Blob. */
+export const homeGalleryImages = [
+  "https://sww5tzjwdjahaqgv.public.blob.vercel-storage.com/home/gallery/1.jpg",
+  "https://sww5tzjwdjahaqgv.public.blob.vercel-storage.com/home/gallery/2.jpg",
+  "https://sww5tzjwdjahaqgv.public.blob.vercel-storage.com/home/gallery/3.jpg",
+  "https://sww5tzjwdjahaqgv.public.blob.vercel-storage.com/home/gallery/4.jpg",
+] as const;
