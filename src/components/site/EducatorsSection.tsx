@@ -117,14 +117,14 @@ export function EducatorsSection() {
               </div>
             </div>
 
-            <div className="absolute -bottom-6 left-0 z-20 w-[42%] overflow-hidden rounded-2xl border-4 border-white shadow-[0_16px_40px_rgba(8,42,94,0.14)] sm:-left-8 sm:w-[46%]">
+            <div className="absolute -bottom-8 left-0 z-20 w-[58%] overflow-hidden rounded-2xl border-4 border-white shadow-[0_16px_40px_rgba(8,42,94,0.14)] sm:-bottom-10 sm:-left-6 sm:w-[62%]">
               <div className="relative aspect-square w-full">
                 <Image
                   src="/theme/burak-hoca-web-yeni.png"
                   alt="Levent College eğitmen kadrosu"
                   fill
                   className="object-cover object-top"
-                  sizes="(max-width: 640px) 35vw, 180px"
+                  sizes="(max-width: 640px) 55vw, 280px"
                 />
               </div>
             </div>
