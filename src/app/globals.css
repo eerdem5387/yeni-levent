@@ -218,3 +218,25 @@ h6 {
 .animate-float-slow {
   animation: float-y 5.5s ease-in-out infinite;
 }
+
+@keyframes hiring-alert-blink {
+  0%,
+  100% {
+    opacity: 1;
+    background-color: #1363df;
+  }
+  50% {
+    opacity: 0.55;
+    background-color: #0b4db3;
+  }
+}
+
+.hiring-alert-banner {
+  animation: hiring-alert-blink 1.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hiring-alert-banner {
+    animation: none;
+  }
+}

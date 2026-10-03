@@ -15,6 +15,9 @@ const hiringBranchButtons = [
   "Coğrafya",
   "Bilişim",
   "Fen Bilimleri",
+  "Fizik",
+  "Kimya",
+  "Biyoloji",
 ] as const;
 
 export function HiringBanners() {
@@ -37,10 +40,10 @@ export function HiringBanners() {
       <a
         href="https://ik.leventokullari.com/"
         rel="noopener noreferrer"
-        className="block bg-[#1363df] px-4 py-4 text-center transition hover:bg-[#2494e4] sm:py-5"
+        className="hiring-alert-banner block bg-[#1363df] px-4 py-4 text-center sm:py-5"
       >
         <span className="font-[family-name:var(--font-display)] text-lg font-semibold uppercase tracking-wide text-white sm:text-2xl md:text-3xl">
-          Muhasebe Uzmanı Aranıyor
+          Fizik · Kimya · Biyoloji
         </span>
       </a>
       <a
