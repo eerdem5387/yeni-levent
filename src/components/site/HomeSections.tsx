@@ -42,8 +42,8 @@ export function HiringBanners() {
         rel="noopener noreferrer"
         className="hiring-alert-banner block bg-[#1363df] px-4 py-4 text-center sm:py-5"
       >
-        <span className="font-[family-name:var(--font-display)] text-lg font-semibold uppercase tracking-wide text-white sm:text-2xl md:text-3xl">
-          Fizik · Kimya · Biyoloji
+        <span className="font-[family-name:var(--font-display)] text-base font-semibold uppercase tracking-wide text-white sm:text-xl md:text-2xl lg:text-3xl">
+          Fizik, Kimya, Biyoloji branşlarında çalışma arkadaşları arıyoruz
         </span>
       </a>
       <a
