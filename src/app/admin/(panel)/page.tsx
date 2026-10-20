@@ -11,27 +11,13 @@ import { AdminPageHeader } from "@/components/admin/ui";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboard() {
-  const [
-    events,
-    messages,
-    staff,
-    unread,
-    competitionApps,
-    unreadCompetition,
-    tripApps,
-    unreadTrips,
-  ] = await Promise.all([
+  const [events, messages, staff, competitionApps, tripApps] = await Promise.all([
     prisma.event.count(),
     prisma.contactMessage.count(),
     prisma.staff.count(),
-    prisma.contactMessage.count({ where: { read: false } }),
     prisma.competitionApplication.count(),
-    prisma.competitionApplication.count({ where: { read: false } }),
     prisma.tripApplication.count(),
-    prisma.tripApplication.count({ where: { read: false } }),
   ]);
-
-  const attention = unread + unreadCompetition + unreadTrips;
 
   const cards = [
     {
@@ -52,7 +38,6 @@ export default async function AdminDashboard() {
       label: "Mesajlar",
       value: messages,
       href: "/admin/mesajlar",
-      note: unread ? `${unread} okunmamış` : "Hepsi okundu",
       icon: Mail,
       tone: "bg-[#fff4db] text-[#9a6b00]",
     },
@@ -60,7 +45,6 @@ export default async function AdminDashboard() {
       label: "Yarışma Başvuruları",
       value: competitionApps,
       href: "/admin/yarisma-basvurulari",
-      note: unreadCompetition ? `${unreadCompetition} yeni` : "Yeni başvuru yok",
       icon: Trophy,
       tone: "bg-[#f3e8ff] text-[#7c3aed]",
     },
@@ -68,7 +52,6 @@ export default async function AdminDashboard() {
       label: "Gezi Başvuruları",
       value: tripApps,
       href: "/admin/gezi-basvurulari",
-      note: unreadTrips ? `${unreadTrips} yeni` : "Yeni başvuru yok",
       icon: MapPinned,
       tone: "bg-[#e0f2fe] text-[#0369a1]",
     },
@@ -91,10 +74,10 @@ export default async function AdminDashboard() {
       <section className="overflow-hidden rounded-3xl border border-[#d0dae9]/80 bg-[linear-gradient(135deg,#082a5e_0%,#1363df_100%)] p-6 text-white shadow-[0_20px_50px_rgba(8,42,94,0.18)] sm:p-8">
         <p className="text-sm text-white/75">Hoş geldiniz</p>
         <h2 className="mt-2 max-w-xl font-[family-name:var(--font-display)] text-2xl font-semibold leading-snug sm:text-3xl">
-          Bugün takip edilmesi gereken {attention} yeni kayıt var.
+          Toplam {tripApps + competitionApps + messages} başvuru ve mesaj kaydı yönetiliyor.
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
-          Okunmamış mesajlar ile yeni yarışma ve gezi başvuruları burada özetlenir.
+          Gezi, yarışma ve iletişim kayıtlarını buradan takip edebilirsiniz.
         </p>
       </section>
 
@@ -115,11 +98,7 @@ export default async function AdminDashboard() {
             <p className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold text-[#082a5e]">
               {card.value}
             </p>
-            {card.note ? (
-              <p className="mt-2 text-xs font-medium text-[#1363df]">{card.note}</p>
-            ) : (
-              <p className="mt-2 text-xs text-[#39557e]/70">Detayları görüntüle</p>
-            )}
+            <p className="mt-2 text-xs text-[#39557e]/70">Detayları görüntüle</p>
           </Link>
         ))}
       </section>

@@ -19,7 +19,6 @@ export async function GET() {
     "Ad Soyad": app.members[0]?.fullName || "",
     "Sınıf / Şube": app.members[0]?.classSection || "",
     Yarışma: app.competitionTitle,
-    Durum: app.read ? "Okundu" : "Yeni",
     "Başvuru Tarihi": new Date(app.createdAt).toLocaleString("tr-TR"),
   }));
 

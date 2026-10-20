@@ -1,24 +1,22 @@
-import { prisma } from "@/lib/prisma";
 import {
-  AdminBadge,
   AdminEmptyState,
   AdminGhostButton,
   AdminPageHeader,
   AdminRecordCard,
 } from "@/components/admin/ui";
-import { deleteMessage, markMessageRead } from "../actions";
+import { prisma } from "@/lib/prisma";
+import { deleteMessage } from "../actions";
 
 export default async function AdminMessagesPage() {
   const messages = await prisma.contactMessage.findMany({
     orderBy: { createdAt: "desc" },
   });
-  const unread = messages.filter((m) => !m.read).length;
 
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="Mesajlar"
-        description={`${messages.length} mesaj · ${unread} okunmamış`}
+        description={`${messages.length} mesaj`}
       />
 
       {messages.length === 0 ? (
@@ -29,13 +27,10 @@ export default async function AdminMessagesPage() {
       ) : (
         <div className="space-y-4">
           {messages.map((msg) => (
-            <AdminRecordCard key={msg.id} unread={!msg.read}>
+            <AdminRecordCard key={msg.id}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="font-semibold text-[#082a5e]">{msg.name}</h2>
-                    {!msg.read ? <AdminBadge tone="info">Yeni</AdminBadge> : null}
-                  </div>
+                  <h2 className="font-semibold text-[#082a5e]">{msg.name}</h2>
                   <p className="mt-1 text-sm text-[#39557e]">
                     {msg.email}
                     {msg.phone ? ` · ${msg.phone}` : ""}
@@ -52,12 +47,6 @@ export default async function AdminMessagesPage() {
                 {msg.message}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {!msg.read && (
-                  <form action={markMessageRead}>
-                    <input type="hidden" name="id" value={msg.id} />
-                    <AdminGhostButton>Okundu işaretle</AdminGhostButton>
-                  </form>
-                )}
                 <form action={deleteMessage}>
                   <input type="hidden" name="id" value={msg.id} />
                   <AdminGhostButton tone="danger">Sil</AdminGhostButton>

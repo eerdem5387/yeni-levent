@@ -20,7 +20,6 @@ export async function GET() {
     Telefon: app.phone,
     "Veli Ad Soyad": app.parentName,
     Gezi: app.tripTitle,
-    Durum: app.read ? "Okundu" : "Yeni",
     "Başvuru Tarihi": new Date(app.createdAt).toLocaleString("tr-TR"),
   }));
 
