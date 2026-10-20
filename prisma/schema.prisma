@@ -153,3 +153,16 @@ model CompetitionMember {
   classSection  String
   order         Int                     @default(0)
 }
+
+
+model TripApplication {
+  id           String   @id @default(cuid())
+  tripKey      String   @default("tiflis-gezisi")
+  tripTitle    String   @default("Rize Levent Koleji Tiflis Gezisi")
+  fullName     String
+  classSection String
+  phone        String
+  parentName   String
+  read         Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}

@@ -19,6 +19,7 @@ export const siteNavItems: NavItem[] = [
   },
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/etkinlikler", label: "Etkinliklerimiz" },
+  { href: "/geziler", label: "Geziler" },
   { href: "/yarisma", label: "Bilgi Yarışması" },
   {
     href: "/hizmetler",
@@ -28,7 +29,7 @@ export const siteNavItems: NavItem[] = [
         href: "/hizmetler/okul-ogrencisi",
         label: "Okul Öğrencisine Açık Hizmetler",
         children: [
-          { href: "/etkinlikler/tiflis-kultur-gezisi", label: "Tiflis Gezisi" },
+          { href: "/geziler", label: "Tiflis Gezisi" },
           { href: "/etkinlikler/yaz-okulu-programi", label: "Yaz Okulu Programları" },
           {
             href: "/etkinlikler/palandoken-gezisi",
@@ -41,7 +42,7 @@ export const siteNavItems: NavItem[] = [
         label: "Misafir ve Yabancı Öğrenciye Açık Hizmetler",
         children: [
           { href: "/hizmetler/misafir-ogrenci#kocluk", label: "Öğrenci Koçluk Hizmetleri" },
-          { href: "/etkinlikler/tiflis-kultur-gezisi", label: "Tiflis Gezisi" },
+          { href: "/geziler", label: "Tiflis Gezisi" },
           { href: "/etkinlikler/yaz-okulu-programi", label: "Yaz Okulu Programları" },
           { href: "/programlar", label: "Yabancı Dil Kursları" },
         ],

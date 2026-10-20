@@ -270,3 +270,22 @@ export async function deleteCompetitionApplication(formData: FormData) {
   revalidatePath("/admin/yarisma-basvurulari");
   revalidatePath("/admin");
 }
+
+export async function markTripApplicationRead(formData: FormData) {
+  await requireAdmin();
+  await prisma.tripApplication.update({
+    where: { id: String(formData.get("id")) },
+    data: { read: true },
+  });
+  revalidatePath("/admin/gezi-basvurulari");
+  revalidatePath("/admin");
+}
+
+export async function deleteTripApplication(formData: FormData) {
+  await requireAdmin();
+  await prisma.tripApplication.delete({
+    where: { id: String(formData.get("id")) },
+  });
+  revalidatePath("/admin/gezi-basvurulari");
+  revalidatePath("/admin");
+}

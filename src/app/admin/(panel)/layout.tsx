@@ -10,6 +10,7 @@ const links = [
   { href: "/admin/kadro", label: "Kadro" },
   { href: "/admin/mesajlar", label: "Mesajlar" },
   { href: "/admin/yarisma-basvurulari", label: "Yarışma Başvuruları" },
+  { href: "/admin/gezi-basvurulari", label: "Gezi Başvuruları" },
   { href: "/admin/ayarlar", label: "Ayarlar" },
 ];
 

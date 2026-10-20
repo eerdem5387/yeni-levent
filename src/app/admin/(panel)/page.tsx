@@ -2,16 +2,27 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboard() {
-  const [events, messages, staff, programs, unread, competitionApps, unreadCompetition] =
-    await Promise.all([
-      prisma.event.count(),
-      prisma.contactMessage.count(),
-      prisma.staff.count(),
-      prisma.program.count(),
-      prisma.contactMessage.count({ where: { read: false } }),
-      prisma.competitionApplication.count(),
-      prisma.competitionApplication.count({ where: { read: false } }),
-    ]);
+  const [
+    events,
+    messages,
+    staff,
+    programs,
+    unread,
+    competitionApps,
+    unreadCompetition,
+    tripApps,
+    unreadTrips,
+  ] = await Promise.all([
+    prisma.event.count(),
+    prisma.contactMessage.count(),
+    prisma.staff.count(),
+    prisma.program.count(),
+    prisma.contactMessage.count({ where: { read: false } }),
+    prisma.competitionApplication.count(),
+    prisma.competitionApplication.count({ where: { read: false } }),
+    prisma.tripApplication.count(),
+    prisma.tripApplication.count({ where: { read: false } }),
+  ]);
 
   const cards = [
     { label: "Etkinlikler", value: events, href: "/admin/etkinlikler" },
@@ -23,6 +34,12 @@ export default async function AdminDashboard() {
       value: competitionApps,
       href: "/admin/yarisma-basvurulari",
       note: `${unreadCompetition} okunmamış`,
+    },
+    {
+      label: "Gezi Başvuruları",
+      value: tripApps,
+      href: "/admin/gezi-basvurulari",
+      note: `${unreadTrips} okunmamış`,
     },
   ];
 
