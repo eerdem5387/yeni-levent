@@ -3,6 +3,7 @@ const city = "R" + "ize";
 export const competitionInfo = {
   key: "lise-bilgi-yarismasi",
   title: `${city} Levent Koleji Lise Bilgi Yarışması`,
+  dateLabel: "1 Aralık 2026",
   prizes: [
     { place: "1.", label: "Sürpriz ödül" },
     { place: "2.", label: "Kitap seti" },

@@ -8,6 +8,7 @@ import {
   Users,
   Brain,
   Newspaper,
+  CalendarDays,
 } from "lucide-react";
 import { PageHero } from "@/components/site/HomeSections";
 import { CompetitionForm } from "@/components/site/CompetitionForm";
@@ -38,6 +39,10 @@ export default function CompetitionPage() {
                 <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold !text-white sm:text-2xl">
                   {competitionInfo.title}
                 </h2>
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-sm font-medium text-white">
+                  <CalendarDays className="h-4 w-4 shrink-0" aria-hidden />
+                  Yarışma Tarihi: {competitionInfo.dateLabel}
+                </p>
               </div>
 
               <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
