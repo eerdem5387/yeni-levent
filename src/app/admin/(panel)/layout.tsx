@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { isNextAuthConfigured } from "@/lib/env";
 import { SignOutButton } from "@/components/admin/SignOutButton";
 
 const links = [
@@ -15,7 +16,17 @@ const links = [
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
+  if (!isNextAuthConfigured()) {
+    redirect("/admin/login?error=config");
+  }
+
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch {
+    redirect("/admin/login?error=config");
+  }
+
   if (!session) redirect("/admin/login");
 
   return (

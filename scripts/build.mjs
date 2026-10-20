@@ -28,9 +28,16 @@ const realDirectUrl = resolveDirectUrl();
 if (realDatabaseUrl) process.env.DATABASE_URL = realDatabaseUrl;
 if (realDirectUrl) process.env.DIRECT_URL = realDirectUrl;
 
-if (!nonempty(process.env.NEXTAUTH_URL) && nonempty(process.env.VERCEL_URL)) {
-  const host = process.env.VERCEL_URL;
-  process.env.NEXTAUTH_URL = host.startsWith("http") ? host : `https://${host}`;
+if (!nonempty(process.env.NEXTAUTH_SECRET) && nonempty(process.env.AUTH_SECRET)) {
+  process.env.NEXTAUTH_SECRET = process.env.AUTH_SECRET;
+}
+
+if (!nonempty(process.env.NEXTAUTH_URL)) {
+  const production = nonempty(process.env.VERCEL_PROJECT_PRODUCTION_URL);
+  const host = production || nonempty(process.env.VERCEL_URL);
+  if (host) {
+    process.env.NEXTAUTH_URL = host.startsWith("http") ? host : `https://${host}`;
+  }
 }
 
 if (!nonempty(process.env.NEXTAUTH_SECRET)) {

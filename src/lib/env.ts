@@ -22,18 +22,33 @@ export function resolveDirectUrl(): string | undefined {
   );
 }
 
+export function resolveNextAuthSecret(): string | undefined {
+  return nonempty(process.env.NEXTAUTH_SECRET) ?? nonempty(process.env.AUTH_SECRET);
+}
+
 export function resolveNextAuthUrl(): string | undefined {
   const explicit = nonempty(process.env.NEXTAUTH_URL);
   if (explicit) return explicit;
+
+  const production = nonempty(process.env.VERCEL_PROJECT_PRODUCTION_URL);
+  if (production) {
+    return production.startsWith("http") ? production : `https://${production}`;
+  }
+
   const vercel = nonempty(process.env.VERCEL_URL);
   if (vercel) return vercel.startsWith("http") ? vercel : `https://${vercel}`;
+
   return undefined;
+}
+
+export function isNextAuthConfigured() {
+  return Boolean(resolveNextAuthSecret());
 }
 
 /** Mutates process.env so Prisma / NextAuth see the expected names. */
 export function applyEnvFallbacks() {
   const databaseUrl = resolveDatabaseUrl();
-  if (databaseUrl && !nonempty(process.env.DATABASE_URL)) {
+  if (databaseUrl) {
     process.env.DATABASE_URL = databaseUrl;
   }
 
@@ -42,8 +57,18 @@ export function applyEnvFallbacks() {
     process.env.DIRECT_URL = directUrl;
   }
 
+  const nextAuthSecret = resolveNextAuthSecret();
+  if (nextAuthSecret) {
+    process.env.NEXTAUTH_SECRET = nextAuthSecret;
+  } else {
+    // Empty string in Vercel still blocks fallbacks — clear it.
+    delete process.env.NEXTAUTH_SECRET;
+  }
+
   const nextAuthUrl = resolveNextAuthUrl();
   if (nextAuthUrl) {
     process.env.NEXTAUTH_URL = nextAuthUrl;
+  } else if (!nonempty(process.env.NEXTAUTH_URL)) {
+    delete process.env.NEXTAUTH_URL;
   }
 }

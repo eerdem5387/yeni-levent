@@ -1,12 +1,13 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { applyEnvFallbacks } from "./env";
+import { applyEnvFallbacks, resolveNextAuthSecret } from "./env";
 import { prisma } from "./prisma";
 
 applyEnvFallbacks();
 
 export const authOptions: NextAuthOptions = {
+  secret: resolveNextAuthSecret(),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/admin/login",

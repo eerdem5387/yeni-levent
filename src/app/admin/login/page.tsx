@@ -1,12 +1,14 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 
-export default function AdminLoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const configError = searchParams.get("error") === "config";
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +24,11 @@ export default function AdminLoginPage() {
     });
     setLoading(false);
     if (res?.error) {
-      setError("E-posta veya şifre hatalı.");
+      setError(
+        res.error === "Configuration"
+          ? "Sunucu auth ayarı eksik. Vercel’e NEXTAUTH_SECRET ve NEXTAUTH_URL ekleyin."
+          : "E-posta veya şifre hatalı.",
+      );
       return;
     }
     router.push("/admin");
@@ -45,6 +51,16 @@ export default function AdminLoginPage() {
           </h1>
           <p className="mt-1 text-sm text-muted">Levent Koleji</p>
         </div>
+
+        {configError && (
+          <div className="mb-4 rounded-md border border-crimson/30 bg-[#fde8ea] px-4 py-3 text-sm text-crimson">
+            Auth yapılandırması eksik. Vercel → Settings → Environment Variables içine
+            <code className="mx-1 rounded bg-white px-1">NEXTAUTH_SECRET</code> ve
+            <code className="mx-1 rounded bg-white px-1">NEXTAUTH_URL=https://leventokullari.com</code>
+            ekleyip redeploy edin.
+          </div>
+        )}
+
         <form onSubmit={onSubmit} className="space-y-4">
           <label className="block text-sm">
             <span className="mb-1 block text-muted">E-posta</span>
@@ -77,5 +93,19 @@ export default function AdminLoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-cream text-sm text-muted">
+          Yükleniyor...
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
