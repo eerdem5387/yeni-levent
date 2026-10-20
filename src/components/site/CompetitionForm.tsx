@@ -1,29 +1,53 @@
 "use client";
 
 import { useState } from "react";
+import {
+  formatClassSection,
+  formatPersonName,
+  isValidClassSection,
+  isValidPersonName,
+  sanitizeClassSection,
+  sanitizePersonName,
+} from "@/lib/form-guards";
+
+const inputClass =
+  "w-full rounded-md border border-[#d0dae9] bg-white px-3 py-2.5 outline-none ring-[#1363df]/25 focus:ring-2";
 
 export function CompetitionForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [classSection, setClassSection] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
     setError("");
 
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-
-    const payload = {
-      fullName: String(fd.get("fullName") || "").trim(),
-      classSection: String(fd.get("classSection") || "").trim(),
+    const normalized = {
+      fullName: formatPersonName(fullName),
+      classSection: formatClassSection(classSection),
     };
+
+    if (!isValidPersonName(normalized.fullName)) {
+      setStatus("error");
+      setError("İsim soyisim en az iki kelime olacak şekilde yazın (yalnızca harf).");
+      return;
+    }
+    if (!isValidClassSection(normalized.classSection)) {
+      setStatus("error");
+      setError("Sınıfı 5-A gibi yazın (5–12 arası sınıf + şube).");
+      return;
+    }
+
+    setFullName(normalized.fullName);
+    setClassSection(normalized.classSection);
 
     try {
       const res = await fetch("/api/competition", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(normalized),
       });
 
       if (!res.ok) {
@@ -31,7 +55,8 @@ export function CompetitionForm() {
         throw new Error(body.error || "Başvuru gönderilemedi.");
       }
 
-      form.reset();
+      setFullName("");
+      setClassSection("");
       setStatus("ok");
     } catch (err) {
       setStatus("error");
@@ -42,6 +67,7 @@ export function CompetitionForm() {
   return (
     <form
       onSubmit={onSubmit}
+      noValidate
       className="rounded-2xl border border-[#d0dae9] bg-white p-5 shadow-[0_12px_36px_rgba(8,42,94,0.08)] sm:p-8"
     >
       <p className="text-sm font-medium text-[#1363df]">Yarışma Formu</p>
@@ -58,21 +84,38 @@ export function CompetitionForm() {
           <span className="mb-1.5 block text-[#39557e]">İsim Soyisim</span>
           <input
             name="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(sanitizePersonName(e.target.value))}
+            onBlur={() => setFullName((v) => formatPersonName(v))}
+            autoComplete="name"
+            autoCapitalize="words"
+            spellCheck={false}
+            inputMode="text"
             required
-            minLength={2}
-            placeholder="Ad Soyad"
-            className="w-full rounded-md border border-[#d0dae9] bg-white px-3 py-2.5 outline-none ring-[#1363df]/25 focus:ring-2"
+            maxLength={60}
+            placeholder="Örn. Ayşe Yılmaz"
+            className={inputClass}
           />
+          <span className="mt-1 block text-xs text-[#39557e]/80">
+            Yalnızca harf; ad ve soyad ayrı yazılmalı.
+          </span>
         </label>
         <label className="block text-sm">
           <span className="mb-1.5 block text-[#39557e]">Sınıf ve Şube</span>
           <input
             name="classSection"
+            value={classSection}
+            onChange={(e) => setClassSection(sanitizeClassSection(e.target.value))}
+            onBlur={() => setClassSection((v) => formatClassSection(v))}
+            autoComplete="off"
+            spellCheck={false}
+            inputMode="text"
             required
-            minLength={1}
+            maxLength={5}
             placeholder="Örn. 9-A"
-            className="w-full rounded-md border border-[#d0dae9] bg-white px-3 py-2.5 outline-none ring-[#1363df]/25 focus:ring-2"
+            className={inputClass}
           />
+          <span className="mt-1 block text-xs text-[#39557e]/80">Örn. 9-A veya 11B</span>
         </label>
       </div>
 
