@@ -135,3 +135,21 @@ model ContactMessage {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+model CompetitionApplication {
+  id             String               @id @default(cuid())
+  competitionKey String               @default("lise-bilgi-yarismasi")
+  competitionTitle String             @default("Rize Levent Koleji Lise Bilgi Yarışması")
+  read           Boolean              @default(false)
+  createdAt      DateTime             @default(now())
+  members        CompetitionMember[]
+}
+
+model CompetitionMember {
+  id            String                  @id @default(cuid())
+  applicationId String
+  application   CompetitionApplication  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fullName      String
+  classSection  String
+  order         Int                     @default(0)
+}

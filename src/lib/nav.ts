@@ -19,6 +19,7 @@ export const siteNavItems: NavItem[] = [
   },
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/etkinlikler", label: "Etkinliklerimiz" },
+  { href: "/yarisma", label: "Bilgi Yarışması" },
   {
     href: "/hizmetler",
     label: "Ürünler ve Hizmetlerimiz",

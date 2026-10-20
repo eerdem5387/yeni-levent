@@ -251,3 +251,22 @@ export async function deleteMessage(formData: FormData) {
   await prisma.contactMessage.delete({ where: { id: String(formData.get("id")) } });
   revalidatePath("/admin/mesajlar");
 }
+
+export async function markCompetitionApplicationRead(formData: FormData) {
+  await requireAdmin();
+  await prisma.competitionApplication.update({
+    where: { id: String(formData.get("id")) },
+    data: { read: true },
+  });
+  revalidatePath("/admin/yarisma-basvurulari");
+  revalidatePath("/admin");
+}
+
+export async function deleteCompetitionApplication(formData: FormData) {
+  await requireAdmin();
+  await prisma.competitionApplication.delete({
+    where: { id: String(formData.get("id")) },
+  });
+  revalidatePath("/admin/yarisma-basvurulari");
+  revalidatePath("/admin");
+}

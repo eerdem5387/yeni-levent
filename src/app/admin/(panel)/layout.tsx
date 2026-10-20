@@ -5,8 +5,11 @@ import { authOptions } from "@/lib/auth";
 import { SignOutButton } from "@/components/admin/SignOutButton";
 
 const links = [
+  { href: "/admin", label: "Özet" },
   { href: "/admin/etkinlikler", label: "Etkinlikler" },
   { href: "/admin/kadro", label: "Kadro" },
+  { href: "/admin/mesajlar", label: "Mesajlar" },
+  { href: "/admin/yarisma-basvurulari", label: "Yarışma Başvuruları" },
   { href: "/admin/ayarlar", label: "Ayarlar" },
 ];
 
