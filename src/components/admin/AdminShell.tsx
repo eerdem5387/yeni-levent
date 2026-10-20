@@ -66,7 +66,7 @@ export function AdminShell({
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#eef3fb_0%,#f7f9fc_40%,#f4f7fb_100%)]">
-      <div className="mx-auto flex min-h-screen max-w-[1600px]">
+      <div className="flex min-h-screen">
         <aside className="sticky top-0 hidden h-screen w-[272px] shrink-0 flex-col overflow-y-auto bg-[linear-gradient(180deg,#061e43_0%,#082a5e_55%,#0a3570_100%)] px-4 py-5 text-white md:flex">
           <div className="mb-6 flex items-center gap-3 rounded-2xl bg-white/5 px-3 py-3 ring-1 ring-white/10">
             <Image
