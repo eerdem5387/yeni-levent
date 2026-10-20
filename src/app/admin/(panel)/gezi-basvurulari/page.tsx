@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { ExportExcelButton } from "@/components/admin/ExportExcelButton";
 import {
   AdminBadge,
   AdminEmptyState,
@@ -6,6 +6,7 @@ import {
   AdminPageHeader,
   AdminRecordCard,
 } from "@/components/admin/ui";
+import { prisma } from "@/lib/prisma";
 import { deleteTripApplication, markTripApplicationRead } from "../actions";
 
 export default async function AdminTripApplicationsPage() {
@@ -19,6 +20,12 @@ export default async function AdminTripApplicationsPage() {
       <AdminPageHeader
         title="Gezi Başvuruları"
         description={`Tiflis Gezisi · ${applications.length} başvuru · ${unread} yeni`}
+        action={
+          <ExportExcelButton
+            href="/api/admin/export/trips"
+            label="Excel İndir"
+          />
+        }
       />
 
       {applications.length === 0 ? (

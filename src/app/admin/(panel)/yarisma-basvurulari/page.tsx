@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { ExportExcelButton } from "@/components/admin/ExportExcelButton";
 import {
   AdminBadge,
   AdminEmptyState,
@@ -6,6 +6,7 @@ import {
   AdminPageHeader,
   AdminRecordCard,
 } from "@/components/admin/ui";
+import { prisma } from "@/lib/prisma";
 import {
   deleteCompetitionApplication,
   markCompetitionApplicationRead,
@@ -25,6 +26,12 @@ export default async function AdminCompetitionApplicationsPage() {
       <AdminPageHeader
         title="Yarışma Başvuruları"
         description={`Lise Bilgi Yarışması · ${applications.length} başvuru · ${unread} yeni`}
+        action={
+          <ExportExcelButton
+            href="/api/admin/export/competition"
+            label="Excel İndir"
+          />
+        }
       />
 
       {applications.length === 0 ? (
