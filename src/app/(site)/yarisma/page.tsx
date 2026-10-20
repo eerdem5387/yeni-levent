@@ -26,16 +26,16 @@ export default function CompetitionPage() {
       <PageHero
         eyebrow="Okul Yarışması"
         title={competitionInfo.title}
-        description="Bilgiyi, takım ruhunu ve heyecanı bir araya getiren lise bilgi yarışmamıza takımınızla başvurun."
+        description="Bilgiyi, takım ruhunu ve heyecanı bir araya getiren lise bilgi yarışmamıza bireysel olarak başvurun."
       />
 
       <div className="bg-[#f4f7fb]">
         <div className="mx-auto grid max-w-[1320px] gap-8 px-4 py-12 sm:px-5 sm:py-16 md:grid-cols-[1.05fr_0.95fr] md:gap-10 md:px-8 lg:gap-14">
-          <div className="space-y-6">
+          <div>
             <section className="overflow-hidden rounded-2xl border border-[#d0dae9] bg-white shadow-[0_12px_36px_rgba(8,42,94,0.06)]">
-              <div className="bg-gradient-to-r from-[#082a5e] to-[#1363df] px-5 py-5 text-white sm:px-7">
-                <p className="text-sm text-white/80">Yarışma Bilgileri</p>
-                <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold sm:text-2xl">
+              <div className="bg-gradient-to-r from-[#082a5e] to-[#1363df] px-5 py-5 sm:px-7">
+                <p className="text-sm text-white/85">Yarışma Bilgileri</p>
+                <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold !text-white sm:text-2xl">
                   {competitionInfo.title}
                 </h2>
               </div>
@@ -105,12 +105,6 @@ export default function CompetitionPage() {
                 </div>
               </div>
             </section>
-
-            <aside className="rounded-2xl border border-dashed border-[#1363df]/35 bg-white px-5 py-4 text-sm leading-relaxed text-[#39557e] sm:px-6">
-              Başvurunuzu gönderdikten sonra takımınız yönetim panelinde listelenir.
-              Eksik veya hatalı bilgi varsa formu yeniden doldurarak yeni bir başvuru
-              oluşturabilirsiniz.
-            </aside>
           </div>
 
           <CompetitionForm />

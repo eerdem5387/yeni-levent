@@ -19,7 +19,7 @@ export default async function AdminCompetitionApplicationsPage() {
           Yarışma Başvuruları
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Lise Bilgi Yarışması takım başvuruları · {applications.length} başvuru
+          Lise Bilgi Yarışması bireysel başvuruları · {applications.length} başvuru
         </p>
       </div>
 
@@ -36,35 +36,20 @@ export default async function AdminCompetitionApplicationsPage() {
         >
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h2 className="font-semibold text-navy">{app.competitionTitle}</h2>
+              <h2 className="font-semibold text-navy">
+                {app.members[0]?.fullName || "İsimsiz başvuru"}
+              </h2>
               <p className="mt-1 text-sm text-muted">
-                {app.members.length} kişilik takım
+                Sınıf / Şube:{" "}
+                <span className="font-medium text-navy">
+                  {app.members[0]?.classSection || "—"}
+                </span>
               </p>
+              <p className="mt-1 text-xs text-muted">{app.competitionTitle}</p>
             </div>
             <time className="text-xs text-muted">
               {new Date(app.createdAt).toLocaleString("tr-TR")}
             </time>
-          </div>
-
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-line text-muted">
-                  <th className="py-2 pr-4 font-medium">#</th>
-                  <th className="py-2 pr-4 font-medium">İsim Soyisim</th>
-                  <th className="py-2 font-medium">Sınıf / Şube</th>
-                </tr>
-              </thead>
-              <tbody>
-                {app.members.map((member, index) => (
-                  <tr key={member.id} className="border-b border-line/70 last:border-0">
-                    <td className="py-2.5 pr-4 text-muted">{index + 1}</td>
-                    <td className="py-2.5 pr-4 font-medium text-navy">{member.fullName}</td>
-                    <td className="py-2.5 text-navy">{member.classSection}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
 
           <div className="mt-4 flex gap-4">

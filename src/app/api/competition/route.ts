@@ -3,15 +3,9 @@ import { z } from "zod";
 import { competitionInfo } from "@/lib/competition";
 import { prisma } from "@/lib/prisma";
 
-const memberSchema = z.object({
+const schema = z.object({
   fullName: z.string().trim().min(2, "İsim soyisim gerekli."),
   classSection: z.string().trim().min(1, "Sınıf ve şube gerekli."),
-});
-
-const schema = z.object({
-  members: z
-    .array(memberSchema)
-    .length(competitionInfo.teamSize, `Takım ${competitionInfo.teamSize} kişiden oluşmalıdır.`),
 });
 
 export async function POST(req: Request) {
@@ -24,11 +18,13 @@ export async function POST(req: Request) {
         competitionKey: competitionInfo.key,
         competitionTitle: competitionInfo.title,
         members: {
-          create: data.members.map((member, index) => ({
-            fullName: member.fullName,
-            classSection: member.classSection,
-            order: index,
-          })),
+          create: [
+            {
+              fullName: data.fullName,
+              classSection: data.classSection,
+              order: 0,
+            },
+          ],
         },
       },
     });
