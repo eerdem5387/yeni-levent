@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import {
   formatClassSection,
@@ -52,8 +53,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
+    console.error("[api/competition]", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Lütfen formu kontrol edin." }, { status: 400 });
+    }
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        { error: "Kayıt sırasında veritabanı hatası oluştu. Lütfen tekrar deneyin." },
+        { status: 500 },
+      );
     }
     return NextResponse.json({ error: "Sunucu hatası." }, { status: 500 });
   }

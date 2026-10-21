@@ -29,6 +29,15 @@ export function isValidPersonName(value: string) {
   return parts.length >= 2 && parts.every((part) => part.length >= 2);
 }
 
+function toAsciiSectionLetter(letter: string) {
+  const upper = letter.toLocaleUpperCase("tr-TR");
+  // Turkish dotted capital I must become Latin I for class sections (A–Z).
+  const normalized = (upper === "İ" ? "I" : upper)
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+  return /^[A-Z]$/.test(normalized) ? normalized : "";
+}
+
 /** Accepts 5A, 5-A, 5 A, 12b → normalized 5-A / 12-B */
 export function sanitizeClassSection(value: string) {
   const compact = value.toLocaleUpperCase("tr-TR").replace(/\s+/g, "");
@@ -37,14 +46,14 @@ export function sanitizeClassSection(value: string) {
     return compact.replace(/[^0-9A-ZÇĞİÖŞÜ-]/g, "").slice(0, 5);
   }
   const grade = match[1];
-  const section = match[2];
+  const section = match[2] ? toAsciiSectionLetter(match[2]) : "";
   if (!section) return grade;
   return `${Number(grade)}-${section}`;
 }
 
 export function formatClassSection(value: string) {
   const cleaned = sanitizeClassSection(value).trim();
-  const match = cleaned.match(/^(\d{1,2})-([A-ZÇĞİÖŞÜ])$/);
+  const match = cleaned.match(/^(\d{1,2})-([A-Z])$/);
   if (!match) return cleaned;
   return `${Number(match[1])}-${match[2]}`;
 }
