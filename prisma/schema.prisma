@@ -97,6 +97,18 @@ model Staff {
   category   StaffCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 }
 
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  pathname  String   @unique
+  filename  String
+  folder    String   @default("staff")
+  alt       String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([folder, createdAt])
+}
+
 model StaffCategory {
   id     String  @id @default(cuid())
   name   String

@@ -1,5 +1,6 @@
 import {
   CalendarDays,
+  Images,
   LayoutDashboard,
   Mail,
   MapPinned,
@@ -13,6 +14,7 @@ const icons = {
   layout: LayoutDashboard,
   calendar: CalendarDays,
   users: Users,
+  images: Images,
   mail: Mail,
   trophy: Trophy,
   map: MapPinned,
