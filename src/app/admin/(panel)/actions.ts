@@ -122,7 +122,6 @@ export async function saveStaff(formData: FormData) {
   const id = String(formData.get("id") || "");
   const name = String(formData.get("name") || "");
   const title = String(formData.get("title") || "");
-  const bio = String(formData.get("bio") || "");
   const photoUrl = String(formData.get("photoUrl") || "").trim() || null;
   const categoryId = String(formData.get("categoryId") || "").trim() || null;
   const order = Number(formData.get("order") || 0);
@@ -132,24 +131,29 @@ export async function saveStaff(formData: FormData) {
     throw new Error("Yeni kadro üyesi için fotoğraf zorunludur.");
   }
 
-  const data = {
-    name,
-    title,
-    bio,
-    photoUrl,
-    order,
-    published,
-    categoryId,
-  };
-
   if (id) {
     await prisma.staff.update({
       where: { id },
-      data,
+      data: {
+        name,
+        title,
+        photoUrl,
+        order,
+        published,
+        categoryId,
+      },
     });
   } else {
     await prisma.staff.create({
-      data,
+      data: {
+        name,
+        title,
+        bio: "",
+        photoUrl,
+        order,
+        published,
+        categoryId,
+      },
     });
   }
   revalidatePath("/admin/kadro");
