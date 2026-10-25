@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import {
   ChevronDown,
+  ChevronUp,
   Pencil,
   Plus,
   Search,
@@ -16,6 +17,8 @@ import { StaffPhotoField } from "@/components/admin/StaffPhotoField";
 import {
   deleteStaff,
   deleteStaffCategory,
+  moveStaff,
+  moveStaffCategory,
   saveStaff,
   saveStaffCategory,
 } from "@/app/admin/(panel)/actions";
@@ -110,6 +113,43 @@ function Modal({
   );
 }
 
+function SortButtons({
+  disabledUp,
+  disabledDown,
+  pending,
+  onMove,
+}: {
+  disabledUp: boolean;
+  disabledDown: boolean;
+  pending: boolean;
+  onMove: (direction: "up" | "down") => void;
+}) {
+  return (
+    <div className="flex shrink-0 flex-col gap-0.5">
+      <button
+        type="button"
+        disabled={pending || disabledUp}
+        onClick={() => onMove("up")}
+        className="rounded-md border border-[#d0dae9] bg-white p-1 text-[#082a5e] hover:border-[#1363df]/40 disabled:cursor-not-allowed disabled:opacity-30"
+        aria-label="Yukarı taşı"
+        title="Yukarı"
+      >
+        <ChevronUp className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
+        disabled={pending || disabledDown}
+        onClick={() => onMove("down")}
+        className="rounded-md border border-[#d0dae9] bg-white p-1 text-[#082a5e] hover:border-[#1363df]/40 disabled:cursor-not-allowed disabled:opacity-30"
+        aria-label="Aşağı taşı"
+        title="Aşağı"
+      >
+        <ChevronDown className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
 export function StaffAdminClient({
   staff,
   categories,
@@ -124,6 +164,11 @@ export function StaffAdminClient({
   const [editMember, setEditMember] = useState<StaffMember | null>(null);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  const sortedCategories = useMemo(
+    () => [...categories].sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, "tr")),
+    [categories],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLocaleLowerCase("tr-TR");
@@ -146,16 +191,21 @@ export function StaffAdminClient({
   }, [staff, query, filterCategory]);
 
   const grouped = useMemo(() => {
+    const byOrder = (a: StaffMember, b: StaffMember) =>
+      a.order - b.order || a.name.localeCompare(b.name, "tr");
+
     const groups = [
-      ...categories.map((category) => ({
+      ...sortedCategories.map((category) => ({
         key: category.id,
         title: category.name,
-        members: filtered.filter((member) => member.categoryId === category.id),
+        members: filtered
+          .filter((member) => member.categoryId === category.id)
+          .sort(byOrder),
       })),
       {
         key: "uncategorized",
         title: "Kategorisiz",
-        members: filtered.filter((member) => !member.categoryId),
+        members: filtered.filter((member) => !member.categoryId).sort(byOrder),
       },
     ].filter((group) => group.members.length > 0);
 
@@ -167,7 +217,30 @@ export function StaffAdminClient({
       );
     }
     return groups;
-  }, [categories, filtered, filterCategory]);
+  }, [sortedCategories, filtered, filterCategory]);
+
+  const searching = query.trim().length > 0;
+  const canReorderStaff = !searching;
+
+  function runMoveStaff(id: string, direction: "up" | "down") {
+    const formData = new FormData();
+    formData.set("id", id);
+    formData.set("direction", direction);
+    startTransition(async () => {
+      await moveStaff(formData);
+      router.refresh();
+    });
+  }
+
+  function runMoveCategory(id: string, direction: "up" | "down") {
+    const formData = new FormData();
+    formData.set("id", id);
+    formData.set("direction", direction);
+    startTransition(async () => {
+      await moveStaffCategory(formData);
+      router.refresh();
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -177,7 +250,7 @@ export function StaffAdminClient({
             Kadro Yönetimi
           </h1>
           <p className="mt-1.5 text-sm text-[#39557e]">
-            {staff.length} üye · {categories.length} kategori
+            {staff.length} üye · {categories.length} kategori · oklarla sıralayın
           </p>
         </div>
         <button
@@ -206,7 +279,7 @@ export function StaffAdminClient({
           className="rounded-xl border border-[#d0dae9] bg-[#f8fbff] px-3 py-2.5 text-sm text-[#082a5e] outline-none"
         >
           <option value="all">Tüm kategoriler</option>
-          {categories.map((category) => (
+          {sortedCategories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
@@ -214,6 +287,12 @@ export function StaffAdminClient({
           <option value="uncategorized">Kategorisiz</option>
         </select>
       </div>
+
+      {searching ? (
+        <p className="text-xs text-[#39557e]">
+          Sıralama için arama kutusunu temizleyin.
+        </p>
+      ) : null}
 
       {grouped.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[#d0dae9] bg-white px-6 py-16 text-center">
@@ -239,13 +318,21 @@ export function StaffAdminClient({
                   {group.members.length}
                 </span>
               </div>
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {group.members.map((member) => (
+              <div className="space-y-3">
+                {group.members.map((member, index) => (
                   <article
                     key={member.id}
                     className="overflow-hidden rounded-2xl border border-[#e7effc] bg-white shadow-[0_8px_24px_rgba(8,42,94,0.04)]"
                   >
                     <div className="flex gap-3 p-3">
+                      {canReorderStaff ? (
+                        <SortButtons
+                          pending={pending}
+                          disabledUp={index === 0}
+                          disabledDown={index === group.members.length - 1}
+                          onMove={(direction) => runMoveStaff(member.id, direction)}
+                        />
+                      ) : null}
                       <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#e7effc]">
                         {member.photoUrl ? (
                           <Image
@@ -263,19 +350,19 @@ export function StaffAdminClient({
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full bg-[#f4f7fb] px-2 py-0.5 text-[10px] font-semibold text-[#39557e]">
+                            #{index + 1}
+                          </span>
                           {!member.published ? (
                             <span className="rounded-full bg-[#fff4db] px-2 py-0.5 text-[10px] font-semibold text-[#9a6b00]">
                               Taslak
                             </span>
                           ) : null}
-                          <span className="rounded-full bg-[#f4f7fb] px-2 py-0.5 text-[10px] font-semibold text-[#39557e]">
-                            Sıra {member.order}
-                          </span>
                         </div>
                         <h3 className="mt-1 truncate font-semibold text-[#082a5e]">
                           {member.name}
                         </h3>
-                        <p className="truncate text-sm text-[#1363df]">{member.title}</p>
+                        <p className="truncate text-sm text-[#1363df]">{member.title || "—"}</p>
                         <div className="mt-3 flex flex-wrap gap-2">
                           <button
                             type="button"
@@ -322,7 +409,7 @@ export function StaffAdminClient({
           <div>
             <p className="font-semibold text-[#082a5e]">Kategori ayarları</p>
             <p className="text-xs text-[#39557e]">
-              Nadiren kullanılır · {categories.length} kategori
+              Kategorileri kendi aralarında sıralayın · {categories.length} kategori
             </p>
           </div>
           <ChevronDown
@@ -342,7 +429,6 @@ export function StaffAdminClient({
                 className={fieldClass}
               />
             </label>
-            <input type="hidden" name="order" value={categories.length + 1} />
             <button
               type="submit"
               className="rounded-xl bg-[#082a5e] px-4 py-2.5 text-sm font-semibold text-white"
@@ -352,28 +438,30 @@ export function StaffAdminClient({
           </form>
 
           <div className="space-y-2">
-            {categories.map((category) => (
+            {sortedCategories.map((category, index) => (
               <div
                 key={category.id}
                 className="flex flex-col gap-2 rounded-xl border border-[#e7effc] bg-[#f8fbff] p-3 sm:flex-row sm:items-center"
               >
+                <SortButtons
+                  pending={pending}
+                  disabledUp={index === 0}
+                  disabledDown={index === sortedCategories.length - 1}
+                  onMove={(direction) => runMoveCategory(category.id, direction)}
+                />
                 <form
                   action={saveStaffCategory}
                   className="flex flex-1 flex-wrap items-center gap-2"
                 >
                   <input type="hidden" name="id" value={category.id} />
+                  <span className="w-8 text-center text-xs font-semibold text-[#39557e]">
+                    #{index + 1}
+                  </span>
                   <input
                     name="name"
                     defaultValue={category.name}
                     required
                     className={`${fieldClass} min-w-[160px] flex-1`}
-                  />
-                  <input
-                    name="order"
-                    type="number"
-                    defaultValue={category.order}
-                    className={`${fieldClass} w-20`}
-                    title="Sıra"
                   />
                   <button
                     type="submit"
@@ -410,7 +498,7 @@ export function StaffAdminClient({
       {addOpen ? (
         <Modal
           title="Yeni üye ekle"
-          description="Fotoğraf, ad, unvan ve kategori yeterli."
+          description="Fotoğraf, ad, unvan ve kategori yeterli. Sıra kategori sonuna eklenir."
           onClose={() => setAddOpen(false)}
         >
           <form action={saveStaff} className="space-y-4">
@@ -423,22 +511,15 @@ export function StaffAdminClient({
               <span className="mb-1.5 block font-medium text-[#39557e]">Unvan / Branş</span>
               <input
                 name="title"
-                required
                 className={fieldClass}
                 placeholder="Örn. Matematik Öğretmeni"
               />
             </label>
-            <CategorySelect categories={categories} />
-            <div className="grid grid-cols-2 gap-3">
-              <label className="block text-sm">
-                <span className="mb-1.5 block font-medium text-[#39557e]">Sıra</span>
-                <input name="order" type="number" defaultValue={0} className={fieldClass} />
-              </label>
-              <label className="flex items-end gap-2 pb-2.5 text-sm font-medium text-[#082a5e]">
-                <input name="published" type="checkbox" defaultChecked className="h-4 w-4" />
-                Yayında
-              </label>
-            </div>
+            <CategorySelect categories={sortedCategories} />
+            <label className="flex items-center gap-2 text-sm font-medium text-[#082a5e]">
+              <input name="published" type="checkbox" defaultChecked className="h-4 w-4" />
+              Yayında
+            </label>
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
@@ -480,35 +561,26 @@ export function StaffAdminClient({
               <span className="mb-1.5 block font-medium text-[#39557e]">Unvan / Branş</span>
               <input
                 name="title"
-                required
                 defaultValue={editMember.title}
                 className={fieldClass}
               />
             </label>
             <CategorySelect
-              categories={categories}
+              categories={sortedCategories}
               defaultValue={editMember.categoryId}
             />
-            <div className="grid grid-cols-2 gap-3">
-              <label className="block text-sm">
-                <span className="mb-1.5 block font-medium text-[#39557e]">Sıra</span>
-                <input
-                  name="order"
-                  type="number"
-                  defaultValue={editMember.order}
-                  className={fieldClass}
-                />
-              </label>
-              <label className="flex items-end gap-2 pb-2.5 text-sm font-medium text-[#082a5e]">
-                <input
-                  name="published"
-                  type="checkbox"
-                  defaultChecked={editMember.published}
-                  className="h-4 w-4"
-                />
-                Yayında
-              </label>
-            </div>
+            <p className="text-xs text-[#39557e]">
+              Sıralama karttaki oklarla yapılır. Kategori değişirse üye yeni kategorinin sonuna eklenir.
+            </p>
+            <label className="flex items-center gap-2 text-sm font-medium text-[#082a5e]">
+              <input
+                name="published"
+                type="checkbox"
+                defaultChecked={editMember.published}
+                className="h-4 w-4"
+              />
+              Yayında
+            </label>
             <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"

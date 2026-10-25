@@ -117,6 +117,48 @@ export async function deleteProgram(formData: FormData) {
   revalidatePath("/");
 }
 
+function revalidateStaffPaths() {
+  revalidatePath("/admin/kadro");
+  revalidatePath("/hakkimizda");
+  revalidatePath("/kadro");
+}
+
+async function nextStaffOrder(categoryId: string | null) {
+  const max = await prisma.staff.aggregate({
+    where: { categoryId },
+    _max: { order: true },
+  });
+  return (max._max.order ?? 0) + 1;
+}
+
+async function reindexStaffInCategory(categoryId: string | null) {
+  const members = await prisma.staff.findMany({
+    where: { categoryId },
+    orderBy: [{ order: "asc" }, { name: "asc" }],
+  });
+  if (members.length === 0) return;
+  await prisma.$transaction(
+    members.map((member, index) =>
+      prisma.staff.update({ where: { id: member.id }, data: { order: index + 1 } }),
+    ),
+  );
+}
+
+async function reindexStaffCategories() {
+  const categories = await prisma.staffCategory.findMany({
+    orderBy: [{ order: "asc" }, { name: "asc" }],
+  });
+  if (categories.length === 0) return;
+  await prisma.$transaction(
+    categories.map((category, index) =>
+      prisma.staffCategory.update({
+        where: { id: category.id },
+        data: { order: index + 1 },
+      }),
+    ),
+  );
+}
+
 export async function saveStaff(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
@@ -124,7 +166,6 @@ export async function saveStaff(formData: FormData) {
   const title = String(formData.get("title") || "");
   const photoUrl = String(formData.get("photoUrl") || "").trim() || null;
   const categoryId = String(formData.get("categoryId") || "").trim() || null;
-  const order = Number(formData.get("order") || 0);
   const published = formData.get("published") === "on";
 
   if (!id && !photoUrl) {
@@ -132,17 +173,25 @@ export async function saveStaff(formData: FormData) {
   }
 
   if (id) {
+    const existing = await prisma.staff.findUnique({ where: { id } });
+    if (!existing) throw new Error("Üye bulunamadı.");
+
+    const categoryChanged = existing.categoryId !== categoryId;
     await prisma.staff.update({
       where: { id },
       data: {
         name,
         title,
         photoUrl,
-        order,
         published,
         categoryId,
+        ...(categoryChanged ? { order: await nextStaffOrder(categoryId) } : {}),
       },
     });
+    if (categoryChanged) {
+      await reindexStaffInCategory(existing.categoryId);
+      await reindexStaffInCategory(categoryId);
+    }
   } else {
     await prisma.staff.create({
       data: {
@@ -150,31 +199,58 @@ export async function saveStaff(formData: FormData) {
         title,
         bio: "",
         photoUrl,
-        order,
+        order: await nextStaffOrder(categoryId),
         published,
         categoryId,
       },
     });
   }
-  revalidatePath("/admin/kadro");
-  revalidatePath("/hakkimizda");
-  revalidatePath("/kadro");
+  revalidateStaffPaths();
   redirect("/admin/kadro");
 }
 
 export async function deleteStaff(formData: FormData) {
   await requireAdmin();
-  await prisma.staff.delete({ where: { id: String(formData.get("id")) } });
-  revalidatePath("/admin/kadro");
-  revalidatePath("/hakkimizda");
-  revalidatePath("/kadro");
+  const id = String(formData.get("id"));
+  const existing = await prisma.staff.findUnique({ where: { id } });
+  await prisma.staff.delete({ where: { id } });
+  if (existing) await reindexStaffInCategory(existing.categoryId);
+  revalidateStaffPaths();
+}
+
+export async function moveStaff(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const direction = String(formData.get("direction") || "");
+  if (direction !== "up" && direction !== "down") return;
+
+  const member = await prisma.staff.findUnique({ where: { id } });
+  if (!member) return;
+
+  const siblings = await prisma.staff.findMany({
+    where: { categoryId: member.categoryId },
+    orderBy: [{ order: "asc" }, { name: "asc" }],
+  });
+  const index = siblings.findIndex((item) => item.id === id);
+  const target = direction === "up" ? index - 1 : index + 1;
+  if (index < 0 || target < 0 || target >= siblings.length) return;
+
+  const ordered = [...siblings];
+  const [item] = ordered.splice(index, 1);
+  ordered.splice(target, 0, item);
+
+  await prisma.$transaction(
+    ordered.map((entry, i) =>
+      prisma.staff.update({ where: { id: entry.id }, data: { order: i + 1 } }),
+    ),
+  );
+  revalidateStaffPaths();
 }
 
 export async function saveStaffCategory(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
   const name = String(formData.get("name") || "").trim();
-  const order = Number(formData.get("order") || 0);
   if (!name) throw new Error("Kategori adı gerekli.");
 
   const slugBase = slugify(name);
@@ -183,24 +259,47 @@ export async function saveStaffCategory(formData: FormData) {
   if (id) {
     await prisma.staffCategory.update({
       where: { id },
-      data: { name, order },
+      data: { name },
     });
   } else {
+    const max = await prisma.staffCategory.aggregate({ _max: { order: true } });
     await prisma.staffCategory.create({
-      data: { name, slug, order },
+      data: { name, slug, order: (max._max.order ?? 0) + 1 },
     });
   }
-  revalidatePath("/admin/kadro");
-  revalidatePath("/kadro");
-  revalidatePath("/hakkimizda");
+  revalidateStaffPaths();
+}
+
+export async function moveStaffCategory(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const direction = String(formData.get("direction") || "");
+  if (direction !== "up" && direction !== "down") return;
+
+  const categories = await prisma.staffCategory.findMany({
+    orderBy: [{ order: "asc" }, { name: "asc" }],
+  });
+  const index = categories.findIndex((item) => item.id === id);
+  const target = direction === "up" ? index - 1 : index + 1;
+  if (index < 0 || target < 0 || target >= categories.length) return;
+
+  const ordered = [...categories];
+  const [item] = ordered.splice(index, 1);
+  ordered.splice(target, 0, item);
+
+  await prisma.$transaction(
+    ordered.map((entry, i) =>
+      prisma.staffCategory.update({ where: { id: entry.id }, data: { order: i + 1 } }),
+    ),
+  );
+  revalidateStaffPaths();
 }
 
 export async function deleteStaffCategory(formData: FormData) {
   await requireAdmin();
   await prisma.staffCategory.delete({ where: { id: String(formData.get("id")) } });
-  revalidatePath("/admin/kadro");
-  revalidatePath("/kadro");
-  revalidatePath("/hakkimizda");
+  await reindexStaffCategories();
+  revalidateStaffPaths();
 }
 
 export async function savePage(formData: FormData) {
