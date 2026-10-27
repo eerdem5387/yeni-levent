@@ -18,7 +18,6 @@ export const siteNavItems: NavItem[] = [
     label: "Bursluluk Sınavı Başvurusu",
   },
   { href: "/hakkimizda", label: "Hakkımızda" },
-  { href: "/kadro", label: "Kadromuz" },
   { href: "/etkinlikler", label: "Etkinliklerimiz" },
   { href: "/geziler", label: "Geziler" },
   { href: "/yarisma", label: "Bilgi Yarışması" },
