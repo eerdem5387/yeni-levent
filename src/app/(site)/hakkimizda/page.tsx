@@ -73,8 +73,9 @@ export default async function AboutPage() {
                             alt={member.name}
                             fill
                             className="object-cover object-top"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                            unoptimized={member.photoUrl!.startsWith("http")}
+                            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 280px"
+                            quality={70}
+                            loading="lazy"
                           />
                         </div>
                         <div className="p-4 text-center">
