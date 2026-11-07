@@ -178,3 +178,15 @@ model TripApplication {
   read         Boolean  @default(false)
   createdAt    DateTime @default(now())
 }
+
+model TournamentApplication {
+  id              String   @id @default(cuid())
+  tournamentKey   String   @default("satranc-mangala")
+  tournamentTitle String   @default("Rize Levent Koleji Satranç ve Mangala Turnuvası")
+  fullName        String
+  classSection    String
+  chess           Boolean  @default(false)
+  mangala         Boolean  @default(false)
+  read            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}

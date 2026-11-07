@@ -4,6 +4,7 @@ import {
   CalendarDays,
   Mail,
   MapPinned,
+  Puzzle,
   Trophy,
   Users,
 } from "lucide-react";
@@ -11,13 +12,15 @@ import { AdminPageHeader } from "@/components/admin/ui";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboard() {
-  const [events, messages, staff, competitionApps, tripApps] = await Promise.all([
-    prisma.event.count(),
-    prisma.contactMessage.count(),
-    prisma.staff.count(),
-    prisma.competitionApplication.count(),
-    prisma.tripApplication.count(),
-  ]);
+  const [events, messages, staff, competitionApps, tournamentApps, tripApps] =
+    await Promise.all([
+      prisma.event.count(),
+      prisma.contactMessage.count(),
+      prisma.staff.count(),
+      prisma.competitionApplication.count(),
+      prisma.tournamentApplication.count(),
+      prisma.tripApplication.count(),
+    ]);
 
   const cards = [
     {
@@ -49,6 +52,13 @@ export default async function AdminDashboard() {
       tone: "bg-[#f3e8ff] text-[#7c3aed]",
     },
     {
+      label: "Turnuva Başvuruları",
+      value: tournamentApps,
+      href: "/admin/turnuva-basvurulari",
+      icon: Puzzle,
+      tone: "bg-[#fce7f3] text-[#be185d]",
+    },
+    {
       label: "Gezi Başvuruları",
       value: tripApps,
       href: "/admin/gezi-basvurulari",
@@ -60,6 +70,7 @@ export default async function AdminDashboard() {
   const shortcuts = [
     { href: "/admin/gezi-basvurulari", label: "Gezi başvurularını incele" },
     { href: "/admin/yarisma-basvurulari", label: "Yarışma başvurularını incele" },
+    { href: "/admin/turnuva-basvurulari", label: "Turnuva başvurularını incele" },
     { href: "/admin/mesajlar", label: "Gelen mesajları aç" },
     { href: "/admin/ayarlar", label: "Site ayarlarını güncelle" },
   ];
@@ -74,10 +85,11 @@ export default async function AdminDashboard() {
       <section className="overflow-hidden rounded-3xl border border-[#d0dae9]/80 bg-[linear-gradient(135deg,#082a5e_0%,#1363df_100%)] p-6 text-white shadow-[0_20px_50px_rgba(8,42,94,0.18)] sm:p-8">
         <p className="text-sm text-white/75">Hoş geldiniz</p>
         <h2 className="mt-2 max-w-xl font-[family-name:var(--font-display)] text-2xl font-semibold leading-snug sm:text-3xl">
-          Toplam {tripApps + competitionApps + messages} başvuru ve mesaj kaydı yönetiliyor.
+          Toplam {tripApps + competitionApps + tournamentApps + messages} başvuru ve
+          mesaj kaydı yönetiliyor.
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
-          Gezi, yarışma ve iletişim kayıtlarını buradan takip edebilirsiniz.
+          Gezi, yarışma, turnuva ve iletişim kayıtlarını buradan takip edebilirsiniz.
         </p>
       </section>
 

@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Mail,
   MapPinned,
+  Puzzle,
   Settings,
   Trophy,
   Users,
@@ -17,6 +18,7 @@ const icons = {
   images: Images,
   mail: Mail,
   trophy: Trophy,
+  puzzle: Puzzle,
   map: MapPinned,
   settings: Settings,
 } as const;
