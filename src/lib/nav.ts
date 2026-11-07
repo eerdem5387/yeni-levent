@@ -21,8 +21,14 @@ export const siteNavItems: NavItem[] = [
   { href: "/kadro", label: "Kadromuz" },
   { href: "/etkinlikler", label: "Etkinliklerimiz" },
   { href: "/geziler", label: "Geziler" },
-  { href: "/yarisma", label: "Bilgi Yarışması" },
-  { href: "/turnuva", label: "Satranç & Mangala" },
+  {
+    href: "/yarisma",
+    label: "Turnuvalar",
+    children: [
+      { href: "/yarisma", label: "Bilgi Yarışması" },
+      { href: "/turnuva", label: "Satranç & Mangala" },
+    ],
+  },
   {
     href: "/hizmetler",
     label: "Ürünler ve Hizmetlerimiz",
