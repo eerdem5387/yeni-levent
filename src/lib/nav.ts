@@ -30,34 +30,6 @@ export const siteNavItems: NavItem[] = [
     ],
   },
   {
-    href: "/hizmetler",
-    label: "Ürünler ve Hizmetlerimiz",
-    children: [
-      {
-        href: "/hizmetler/okul-ogrencisi",
-        label: "Okul Öğrencisine Açık Hizmetler",
-        children: [
-          { href: "/geziler", label: "Tiflis Gezisi" },
-          { href: "/etkinlikler/yaz-okulu-programi", label: "Yaz Okulu Programları" },
-          {
-            href: "/etkinlikler/palandoken-gezisi",
-            label: "Palandöken Gezisi Başvuru Formu",
-          },
-        ],
-      },
-      {
-        href: "/hizmetler/misafir-ogrenci",
-        label: "Misafir ve Yabancı Öğrenciye Açık Hizmetler",
-        children: [
-          { href: "/hizmetler/misafir-ogrenci#kocluk", label: "Öğrenci Koçluk Hizmetleri" },
-          { href: "/geziler", label: "Tiflis Gezisi" },
-          { href: "/etkinlikler/yaz-okulu-programi", label: "Yaz Okulu Programları" },
-          { href: "/programlar", label: "Yabancı Dil Kursları" },
-        ],
-      },
-    ],
-  },
-  {
     href: "/iletisim",
     label: "İletişim",
     children: [

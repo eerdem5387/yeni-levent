@@ -68,11 +68,6 @@ export function SiteFooter({ siteName, phone, email, address }: FooterProps) {
               </Link>
             </li>
             <li>
-              <Link href="/hizmetler" className="hover:text-[#fab123]">
-                Ürünler ve Hizmetlerimiz
-              </Link>
-            </li>
-            <li>
               <Link href="/iletisim" className="hover:text-[#fab123]">
                 İletişim
               </Link>
